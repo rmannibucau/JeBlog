@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<tomee>
+
+  <Resource id="jdbc/jeblog">
+    UserName = sa
+    Password =
+    JdbcUrl = jdbc:hsqldb:mem:jeblog
+    JdbcDriver = jdbcD
+
+    # LogSql = true
+  </Resource>
+
+</tomee>
