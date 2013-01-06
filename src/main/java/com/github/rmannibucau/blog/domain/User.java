@@ -8,6 +8,7 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
 
 @Entity
 @Typed
@@ -16,6 +17,11 @@ import javax.xml.bind.annotation.XmlRootElement;
         name = User.FIND_BY_NAME_AND_PASSWORD,
         query = "select u from User u where u.login = :login and  u.password = :password")
 @XmlRootElement
+@XmlType(propOrder = {
+    "login",
+    "password",
+    "displayName"
+})
 public class User extends AuditedEntity {
     public static final String FIND_BY_NAME_AND_PASSWORD = "User.findByNameAndPassword";
 
