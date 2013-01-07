@@ -8,10 +8,14 @@ import javax.ejb.Lock;
 import javax.ejb.LockType;
 import javax.ejb.Singleton;
 import javax.inject.Inject;
-import javax.persistence.NoResultException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import javax.ws.rs.FormParam;
+import javax.ws.rs.GET;
+import javax.ws.rs.HEAD;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.core.Context;
 
 @Singleton
 @Lock(LockType.READ)
@@ -22,18 +26,35 @@ public class UserService {
 
     @POST
     @Path("login")
-    public void login(final @FormParam("username") String name, final @FormParam("password") String password) {
-        try {
-            dao.findByNameAndPassword(name, password);
-        } catch (NoResultException nre) {
+    public void login(final @FormParam("username") String name, final @FormParam("password") String password,
+                      final @Context HttpServletRequest request) {
+        if (dao.findByNameAndPassword(name, password) != null) {
+            request.getSession(true).setAttribute("name", name);
+        } else {
             throw new AuthenticationFailure(name);
+        }
+    }
+
+    @GET
+    @Path("is-logged")
+    public boolean isLogged(final @Context HttpServletRequest request) {
+        final HttpSession session = request.getSession();
+        return session != null && session.getAttribute("name") != null;
+    }
+
+    @HEAD
+    @Path("logout")
+    public void logout(final @Context HttpServletRequest request) {
+        final HttpSession session = request.getSession();
+        if (session != null) {
+            session.invalidate();
         }
     }
 
     @POST
     @Path("create")
     public User create(final @FormParam("username") String name, final @FormParam("password") String password,
-                       final @FormParam("password") String displayName) {
+                       final @FormParam("displayName") String displayName) {
         final User user = new User().login(name).password(password).displayName(displayName);
         dao.save(user);
         return user;

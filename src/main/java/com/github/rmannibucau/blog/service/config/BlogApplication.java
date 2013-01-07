@@ -22,6 +22,8 @@ public class BlogApplication extends Application {
         jsonProvider.setSerializeAsArray(true);
         jsonProvider.setDropRootElement(true);
         singletons.add(jsonProvider);
+
+        classes.add(AuthenticationFailureMapper.class);
     }
 
     @Override
