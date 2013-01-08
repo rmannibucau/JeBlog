@@ -33,6 +33,7 @@ public abstract class AuditedEntity {
     @PrePersist
     private void initCreatedDate() {
         created = new Date();
+        modified = created;
     }
 
     @PreUpdate

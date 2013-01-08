@@ -37,7 +37,7 @@ public class User extends AuditedEntity {
 
     @NotNull
     @Size(max = 255)
-    @Column(nullable = false)
+    @Column(name = "display_name", nullable = false)
     private String displayName;
 
     public String getLogin() {
