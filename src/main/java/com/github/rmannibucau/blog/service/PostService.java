@@ -6,7 +6,6 @@ import com.github.rmannibucau.blog.dao.UserDao;
 import com.github.rmannibucau.blog.domain.Category;
 import com.github.rmannibucau.blog.domain.Post;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 
 import javax.ejb.Lock;
 import javax.ejb.LockType;
@@ -56,21 +55,20 @@ public class PostService {
         return Response.ok(posts.saveAndFlush(post)).build(); // validation on flush
     }
 
+    @POST
+    @Path("post/update")
+    public void update(final @FormParam("") FormUpdatePost input) {
+        final Post post = posts.findOne(input.getId());
+        if (post == null) {
+            throw new IllegalStateException("Post " + input.getId() + " not found");
+        }
+        updatePost(post, input);
+    }
+
     @GET
     @Path("post/{id}")
     public Post read(final @PathParam("id") long id) {
         return posts.findOne(id);
-    }
-
-    @POST
-    @Path("post/{id}")
-    public void update(final @PathParam("id") long id, final @FormParam("") FormPost input) {
-        final Post post = posts.findOne(id);
-        if (post == null) {
-            throw new IllegalStateException("Post " + id + " not found");
-        }
-
-        updatePost(post, input);
     }
 
     @DELETE
@@ -81,10 +79,10 @@ public class PostService {
 
     @GET
     @Path("posts")
-    public List<Post> findAll(final @QueryParam("page") @DefaultValue("1") int page,
+    public List<Post> findAll(final @QueryParam("status") @DefaultValue("PUBLISHED") Post.Status status,
+                              final @QueryParam("page") @DefaultValue("0") int page,
                               final @QueryParam("size") @DefaultValue("20") int size) {
-        final Pageable pageable = new PageRequest(page, size);
-        return posts.findAll(pageable).getContent();
+        return posts.findByStatus(status, new PageRequest(page, size)).getContent();
     }
 
     private String currentUser(final HttpServletRequest request) {

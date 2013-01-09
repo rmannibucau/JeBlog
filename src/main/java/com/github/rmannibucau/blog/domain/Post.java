@@ -141,6 +141,10 @@ public class Post {
         return id;
     }
 
+    public void setId(final Long id) {
+        this.id = id;
+    }
+
     public Date getCreated() {
         return created;
     }
