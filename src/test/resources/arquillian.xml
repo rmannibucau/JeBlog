@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<arquillian
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  >
+  <container qualifier="openejb" default="true">
+    <configuration>
+      <property name="properties">
+        blog = new://Resource?type=DataSource
+        blog.JdbcUrl = jdbc:hsqldb:mem:jeblog
+        # blog.LogSql = true
+      </property>
+    </configuration>
+  </container>
+</arquillian>

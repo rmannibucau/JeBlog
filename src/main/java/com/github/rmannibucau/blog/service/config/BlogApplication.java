@@ -1,5 +1,6 @@
 package com.github.rmannibucau.blog.service.config;
 
+import com.github.rmannibucau.blog.service.PostService;
 import com.github.rmannibucau.blog.service.UserService;
 import org.apache.cxf.jaxrs.provider.json.JSONProvider;
 
@@ -16,14 +17,13 @@ public class BlogApplication extends Application {
     public BlogApplication() {
         // rest services
         classes.add(UserService.class);
+        classes.add(PostService.class);
 
         // providers
         final JSONProvider<Object> jsonProvider = new JSONProvider<Object>();
-        jsonProvider.setSerializeAsArray(true);
         jsonProvider.setDropRootElement(true);
+        jsonProvider.setSupportUnwrapped(true);
         singletons.add(jsonProvider);
-
-        classes.add(AuthenticationFailureMapper.class);
     }
 
     @Override

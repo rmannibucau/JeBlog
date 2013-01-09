@@ -1,13 +1,21 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <tomee>
 
-  <Resource id="jdbc/jeblog">
+  <Resource id="jdbc/je-blog">
     UserName = sa
     Password =
     JdbcUrl = jdbc:hsqldb:mem:jeblog
     JdbcDriver = jdbcD
 
     # LogSql = true
+  </Resource>
+  <Resource id="jdbc/je-blog-non-jta">
+    UserName = sa
+    Password =
+    JdbcUrl = jdbc:hsqldb:mem:jeblog
+    JdbcDriver = jdbcD
+    MaxActive = 1
+    JtaManaged = false
   </Resource>
 
 </tomee>
