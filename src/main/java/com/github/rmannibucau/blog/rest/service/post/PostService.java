@@ -1,10 +1,14 @@
-package com.github.rmannibucau.blog.service;
+package com.github.rmannibucau.blog.rest.service.post;
 
 import com.github.rmannibucau.blog.dao.CategoryDao;
 import com.github.rmannibucau.blog.dao.PostDao;
 import com.github.rmannibucau.blog.dao.UserDao;
 import com.github.rmannibucau.blog.domain.Category;
 import com.github.rmannibucau.blog.domain.Post;
+import com.github.rmannibucau.blog.rest.exception.NotAuthorizedException;
+import com.github.rmannibucau.blog.rest.service.post.form.FormPost;
+import com.github.rmannibucau.blog.rest.service.post.form.FormUpdatePost;
+import com.github.rmannibucau.blog.rest.service.user.UserService;
 import org.springframework.data.domain.PageRequest;
 
 import javax.ejb.Lock;
@@ -19,11 +23,13 @@ import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
-import javax.ws.rs.core.Response;
+import javax.ws.rs.core.MediaType;
 import java.util.List;
 
+@Path("post")
 @Singleton
 @Lock(LockType.READ)
 public class PostService {
@@ -40,45 +46,45 @@ public class PostService {
     private UserService userService;
 
     @POST
-    @Path("post/create")
-    public Response create(final @FormParam("") FormPost input, final @Context HttpServletRequest request) {
-        final String currentUser;
-        try {
-            currentUser = currentUser(request);
-        } catch (IllegalStateException ise) {
-            return Response.status(Response.Status.FORBIDDEN).build();
-        }
-
+    @Path("create")
+    public Post create(final @FormParam("") FormPost input, final @Context HttpServletRequest request) {
+        final String currentUser = currentUser(request);
         final Post post = new Post();
         updatePost(post, input);
         post.setAuthor(users.findByLogin(currentUser));
-        return Response.ok(posts.saveAndFlush(post)).build(); // validation on flush
+        return posts.saveAndFlush(post); // validation on flush
     }
 
     @POST
-    @Path("post/update")
+    @Path("update")
     public void update(final @FormParam("") FormUpdatePost input) {
         final Post post = posts.findOne(input.getId());
         if (post == null) {
-            throw new IllegalStateException("Post " + input.getId() + " not found");
+            throw new IllegalArgumentException("Post " + input.getId() + " not found");
         }
+
         updatePost(post, input);
+
+        if (input.getStatus() != null) {
+            final Post.Status status = Post.Status.valueOf(input.getStatus());
+            post.setStatus(status);
+        }
     }
 
     @GET
-    @Path("post/{id}")
+    @Path("{id}")
     public Post read(final @PathParam("id") long id) {
         return posts.findOne(id);
     }
 
     @DELETE
-    @Path("post/{id}")
+    @Path("{id}")
     public void delete(final @PathParam("id") long id) {
         posts.delete(id);
     }
 
     @GET
-    @Path("posts")
+    @Path("list")
     public List<Post> findAll(final @QueryParam("status") @DefaultValue("PUBLISHED") Post.Status status,
                               final @QueryParam("page") @DefaultValue("0") int page,
                               final @QueryParam("size") @DefaultValue("20") int size) {
@@ -86,9 +92,9 @@ public class PostService {
     }
 
     private String currentUser(final HttpServletRequest request) {
-        final String currentUser = userService.currentUser(request.getSession());
+        final String currentUser = userService.currentUser(request.getSession(false));
         if (currentUser == null) {
-            throw new IllegalStateException("Only logged user can post");
+            throw new NotAuthorizedException();
         }
         return currentUser;
     }

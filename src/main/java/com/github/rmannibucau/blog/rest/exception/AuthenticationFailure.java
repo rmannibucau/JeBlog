@@ -1,4 +1,4 @@
-package com.github.rmannibucau.blog.service.exception;
+package com.github.rmannibucau.blog.rest.exception;
 
 public class AuthenticationFailure extends RuntimeException {
     public AuthenticationFailure(final String name) {

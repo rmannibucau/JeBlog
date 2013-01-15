@@ -1,4 +1,4 @@
-package com.github.rmannibucau.blog.service;
+package com.github.rmannibucau.blog.rest.service.post.form;
 
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
@@ -12,6 +12,7 @@ import javax.xml.bind.annotation.XmlType;
 })
 public class FormUpdatePost extends FormPost {
     private long id;
+    private String status;
 
     public long getId() {
         return id;
@@ -19,5 +20,13 @@ public class FormUpdatePost extends FormPost {
 
     public void setId(long id) {
         this.id = id;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(final String status) {
+        this.status = status;
     }
 }

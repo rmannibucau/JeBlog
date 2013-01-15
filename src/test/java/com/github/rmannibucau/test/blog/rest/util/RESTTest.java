@@ -1,4 +1,4 @@
-package com.github.rmannibucau.test.blog.service.util;
+package com.github.rmannibucau.test.blog.rest.util;
 
 import com.github.rmannibucau.blog.domain.Post;
 import com.github.rmannibucau.blog.domain.User;
@@ -8,36 +8,18 @@ import org.apache.cxf.jaxrs.ext.form.Form;
 import org.apache.cxf.jaxrs.impl.MetadataMap;
 import org.apache.cxf.jaxrs.provider.json.JSONProvider;
 import org.apache.cxf.message.Message;
-import org.apache.deltaspike.core.api.provider.BeanProvider;
 import org.apache.ziplock.IO;
-import org.jboss.arquillian.container.test.api.Deployment;
-import org.jboss.shrinkwrap.api.ShrinkWrap;
-import org.jboss.shrinkwrap.api.asset.FileAsset;
-import org.jboss.shrinkwrap.api.spec.WebArchive;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
-import org.springframework.aop.config.AdviceEntry;
-import org.springframework.asm.AnnotationVisitor;
-import org.springframework.beans.annotation.AnnotationBeanUtils;
-import org.springframework.cache.interceptor.CachePutOperation;
-import org.springframework.core.annotation.AnnotationAttributes;
-import org.springframework.dao.support.DaoSupport;
-import org.springframework.data.convert.EntityConverter;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.expression.BeanResolver;
-import org.springframework.jdbc.core.metadata.CallMetaDataProvider;
-import org.springframework.orm.ObjectOptimisticLockingFailureException;
 
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.io.ByteArrayInputStream;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.annotation.Annotation;
 import java.util.Collections;
 
-import static org.apache.ziplock.JarLocation.jarLocation;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.junit.Assert.assertThat;
 
@@ -53,35 +35,15 @@ public abstract class RESTTest {
     @BeforeClass
     public static void createAdmin() throws Exception {
         final WebClient client = newWebClient();
-        client.path("user/create").form(new Form().set("username", NAME).set("displayName", "Admin").set("password", PWD));
-        adminId = client.reset().path("user/login/admin").get(User.class).getId();
+        final Response response = client.path("user/create").form(new Form().set("username", NAME).set("displayName", "Admin").set("password", PWD));
+        adminId = unserialize(User.class, response).getId();
+        client.reset().path("user/login")
+                .form(new Form().set("username", NAME).set("password", PWD));
     }
 
     @AfterClass
     public static void deleteAdmin() {
         newWebClient().path("user/{id}", adminId).delete();
-    }
-
-    @Deployment(testable = false)
-    public static WebArchive javaEEBlog() {
-        return ShrinkWrap.create(WebArchive.class, "je-blog.war")
-                .addPackages(true, "com.github.rmannibucau.blog")
-                .addAsWebInfResource(new FileAsset(new File("src/main/webapp/WEB-INF/beans.xml")), "beans.xml")
-                .addAsWebInfResource(new FileAsset(new File("src/main/webapp/WEB-INF/persistence.xml")), "persistence.xml")
-                // spring-data-jpa dependencies
-                .addAsLibraries(jarLocation(EntityConverter.class))
-                .addAsLibraries(jarLocation(AdviceEntry.class))
-                .addAsLibraries(jarLocation(AnnotationVisitor.class))
-                .addAsLibraries(jarLocation(AnnotationBeanUtils.class))
-                .addAsLibraries(jarLocation(CachePutOperation.class))
-                .addAsLibraries(jarLocation(AnnotationAttributes.class))
-                .addAsLibraries(jarLocation(BeanResolver.class))
-                .addAsLibraries(jarLocation(CallMetaDataProvider.class))
-                .addAsLibraries(jarLocation(ObjectOptimisticLockingFailureException.class))
-                .addAsLibraries(jarLocation(DaoSupport.class))
-                .addAsLibraries(jarLocation(JpaRepository.class))
-                // deltaspike dependencies
-                .addAsLibraries(jarLocation(BeanProvider.class));
     }
 
     protected static <T> JSONProvider<T> provider(final Class<T> clazz) {

@@ -1,18 +1,13 @@
 package com.github.rmannibucau.blog.domain.xml;
 
-import com.github.rmannibucau.blog.dao.CategoryDao;
 import com.github.rmannibucau.blog.domain.Category;
-import org.apache.deltaspike.core.api.provider.BeanProvider;
 
 import javax.xml.bind.annotation.adapters.XmlAdapter;
 
 public class CategoryAdaptor extends XmlAdapter<String, Category> {
     @Override
-    public Category unmarshal(String name) throws Exception {
-        if (name == null) {
-            return null;
-        }
-        return BeanProvider.getContextualReference(CategoryDao.class).findByName(String.class.cast(name));
+    public Category unmarshal(final String name) throws Exception {
+        throw new UnsupportedOperationException();
     }
 
     @Override

@@ -1,4 +1,4 @@
-package com.github.rmannibucau.blog.service;
+package com.github.rmannibucau.blog.rest.service.user;
 
 import com.github.rmannibucau.blog.dao.UserDao;
 import com.github.rmannibucau.blog.domain.User;
@@ -83,12 +83,6 @@ public class UserService {
     @Path("{id}")
     public User read(final @PathParam("id") long id) {
         return users.findOne(id);
-    }
-
-    @GET
-    @Path("/login/{login}")
-    public User readByLogin(final @PathParam("login") String name) {
-        return users.findByLogin(name);
     }
 
     public String currentUser(final HttpSession session) {

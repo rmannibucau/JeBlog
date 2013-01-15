@@ -1,4 +1,4 @@
-package com.github.rmannibucau.blog.service;
+package com.github.rmannibucau.blog.rest.service.post.form;
 
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;

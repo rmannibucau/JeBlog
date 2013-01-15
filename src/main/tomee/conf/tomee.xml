@@ -5,7 +5,6 @@
     UserName = sa
     Password =
     JdbcUrl = jdbc:hsqldb:mem:jeblog
-    JdbcDriver = jdbcD
 
     # LogSql = true
   </Resource>
@@ -13,7 +12,6 @@
     UserName = sa
     Password =
     JdbcUrl = jdbc:hsqldb:mem:jeblog
-    JdbcDriver = jdbcD
     MaxActive = 1
     JtaManaged = false
   </Resource>

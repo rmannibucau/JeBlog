@@ -1,7 +1,7 @@
-package com.github.rmannibucau.test.blog.service;
+package com.github.rmannibucau.test.blog.rest.service;
 
 import com.github.rmannibucau.blog.domain.User;
-import com.github.rmannibucau.test.blog.service.util.RESTTest;
+import com.github.rmannibucau.test.blog.rest.util.RESTTest;
 import org.apache.cxf.jaxrs.client.WebClient;
 import org.apache.cxf.jaxrs.ext.form.Form;
 import org.jboss.arquillian.junit.Arquillian;

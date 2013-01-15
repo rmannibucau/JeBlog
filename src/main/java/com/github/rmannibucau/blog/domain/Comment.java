@@ -1,12 +1,12 @@
 package com.github.rmannibucau.blog.domain;
 
 import com.github.rmannibucau.blog.domain.xml.DateAdaptor;
+import com.github.rmannibucau.blog.domain.xml.PostIdAdapter;
 
 import javax.enterprise.inject.Typed;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
@@ -16,6 +16,8 @@ import javax.persistence.TemporalType;
 import javax.persistence.Version;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
@@ -28,10 +30,14 @@ import java.util.Date;
 @XmlRootElement
 @XmlType(propOrder = {
         "id",
+        "post",
         "author",
+        "email",
+        "status",
         "content",
         "created"
 })
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Comment {
     public static enum Status {
         PENDING, APPROVED
@@ -61,12 +67,12 @@ public class Comment {
 
     private Status status;
 
-    @Lob
     @Size(min = 3, max = 512)
     private String content;
 
     @NotNull
     @ManyToOne
+    @XmlJavaTypeAdapter(PostIdAdapter.class)
     private Post post;
 
     @PrePersist

@@ -8,9 +8,11 @@
     <jta-data-source>jdbc/jeblog</jta-data-source>
     <non-jta-data-source>jdbc/jeblog-non-jta</non-jta-data-source>
     <properties>
+      <property name="openejb.jpa.init-entitymanager" value="true" />
       <property name="openejb.jpa.auto-scan" value="true" />
       <property name="openejb.jpa.auto-scan.package" value="com.github.rmannibucau.blog.domain" />
 
+      <property name="openjpa.RuntimeUnenhancedClasses" value="unsupported"/>
       <property name="openjpa.jdbc.SynchronizeMappings" value="buildSchema(ForeignKeys=true)"/>
     </properties>
   </persistence-unit>

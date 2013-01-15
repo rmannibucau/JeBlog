@@ -1,7 +1,7 @@
-package com.github.rmannibucau.test.blog.service;
+package com.github.rmannibucau.test.blog.rest.service;
 
 import com.github.rmannibucau.blog.domain.Post;
-import com.github.rmannibucau.test.blog.service.util.RESTTest;
+import com.github.rmannibucau.test.blog.rest.util.RESTTest;
 import org.apache.cxf.jaxrs.client.WebClient;
 import org.apache.cxf.jaxrs.ext.form.Form;
 import org.jboss.arquillian.junit.Arquillian;
@@ -81,7 +81,7 @@ public class PostServiceTest extends RESTTest {
             ids.add(createPost(webClient, "delete #" + i));
         }
 
-        final Collection<? extends Post> posts = webClient.reset().path("posts")
+        final Collection<? extends Post> posts = webClient.reset().path("post/list")
                                                     .query("status", Post.Status.DRAFT)
                                                     .accept(MediaType.APPLICATION_JSON_TYPE)
                                                     .getCollection(Post.class);

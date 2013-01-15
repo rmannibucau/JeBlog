@@ -5,14 +5,10 @@ import java.util.Calendar;
 import java.util.Date;
 
 public class DateAdaptor extends XmlAdapter<String, Date> {
-
-    public static final Calendar CALENDAR = Calendar.getInstance();
+    private static final Calendar CALENDAR = Calendar.getInstance();
 
     @Override
     public Date unmarshal(final String v) throws Exception {
-        if (v == null) {
-            return null;
-        }
         throw new UnsupportedOperationException();
     }
 
