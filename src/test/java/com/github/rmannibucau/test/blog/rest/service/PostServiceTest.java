@@ -76,7 +76,7 @@ public class PostServiceTest extends RESTTest {
     @Test
     public void findAll() throws IOException {
         final WebClient webClient = newWebClient();
-        final Collection<Long> ids = new ArrayList<Long>();
+        final Collection<Long> ids = new ArrayList<>();
         for (int i = 0; i < 10; i++) {
             ids.add(createPost(webClient, "delete #" + i));
         }

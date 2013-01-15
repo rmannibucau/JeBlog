@@ -2,6 +2,7 @@ package com.github.rmannibucau.test.blog.rest.util;
 
 import com.github.rmannibucau.blog.domain.Post;
 import com.github.rmannibucau.blog.domain.User;
+import com.github.rmannibucau.blog.rest.config.BlogApplication;
 import org.apache.cxf.jaxrs.client.JAXRSClientFactoryBean;
 import org.apache.cxf.jaxrs.client.WebClient;
 import org.apache.cxf.jaxrs.ext.form.Form;
@@ -26,11 +27,12 @@ import static org.junit.Assert.assertThat;
 public abstract class RESTTest {
     protected static final Annotation[] ANNOTATIONS = new Annotation[0];
     protected static final MediaType JSON = MediaType.APPLICATION_JSON_TYPE;
-    protected static final MetadataMap<String,String> HEADERS = new MetadataMap<String, String>();
+    protected static final MetadataMap<String,String> HEADERS = new MetadataMap<>();
     protected static final String NAME = "admin";
     protected static final String PWD = "adminpwd";
 
     private static long adminId;
+    private static JSONProvider<Object> jsonProvider = new BlogApplication().jsonProvider();
 
     @BeforeClass
     public static void createAdmin() throws Exception {
@@ -42,13 +44,6 @@ public abstract class RESTTest {
     @AfterClass
     public static void deleteAdmin() {
         newWebClient().path("user/{id}", adminId).delete();
-    }
-
-    protected static <T> JSONProvider<T> provider(final Class<T> clazz) {
-        final JSONProvider<T> jsonProvider = new JSONProvider<T>();
-        jsonProvider.setDropRootElement(true);
-        jsonProvider.setSupportUnwrapped(true);
-        return jsonProvider;
     }
 
     protected static String json(final Response response) throws IOException {
@@ -65,7 +60,8 @@ public abstract class RESTTest {
     }
 
     protected static <T> T unserialize(final Class<T> clazz, final Response response) throws IOException {
-        return provider(clazz).readFrom(clazz, clazz, ANNOTATIONS, JSON, HEADERS, new ByteArrayInputStream(json(response).getBytes()));
+        return (T) jsonProvider.readFrom((Class<Object>) clazz, clazz,
+                                ANNOTATIONS, JSON, HEADERS, new ByteArrayInputStream(json(response).getBytes()));
     }
 
     protected static WebClient logout(final WebClient client) {
