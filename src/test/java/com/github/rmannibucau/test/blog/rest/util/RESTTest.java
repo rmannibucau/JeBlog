@@ -37,8 +37,6 @@ public abstract class RESTTest {
         final WebClient client = newWebClient();
         final Response response = client.path("user/create").form(new Form().set("username", NAME).set("displayName", "Admin").set("password", PWD));
         adminId = unserialize(User.class, response).getId();
-        client.reset().path("user/login")
-                .form(new Form().set("username", NAME).set("password", PWD));
     }
 
     @AfterClass
