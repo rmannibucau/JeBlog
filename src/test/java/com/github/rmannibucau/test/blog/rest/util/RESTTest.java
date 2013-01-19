@@ -1,7 +1,6 @@
 package com.github.rmannibucau.test.blog.rest.util;
 
 import com.github.rmannibucau.blog.domain.Post;
-import com.github.rmannibucau.blog.domain.User;
 import com.github.rmannibucau.blog.rest.config.BlogApplication;
 import org.apache.cxf.jaxrs.client.JAXRSClientFactoryBean;
 import org.apache.cxf.jaxrs.client.WebClient;
@@ -10,8 +9,6 @@ import org.apache.cxf.jaxrs.impl.MetadataMap;
 import org.apache.cxf.jaxrs.provider.json.JSONProvider;
 import org.apache.cxf.message.Message;
 import org.apache.ziplock.IO;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
 
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -31,20 +28,7 @@ public abstract class RESTTest {
     protected static final String NAME = "admin";
     protected static final String PWD = "adminpwd";
 
-    private static long adminId;
     private static JSONProvider<Object> jsonProvider = new BlogApplication().jsonProvider();
-
-    @BeforeClass
-    public static void createAdmin() throws Exception {
-        final WebClient client = newWebClient();
-        final Response response = client.path("user/create").form(new Form().set("username", NAME).set("displayName", "Admin").set("password", PWD));
-        adminId = unserialize(User.class, response).getId();
-    }
-
-    @AfterClass
-    public static void deleteAdmin() {
-        newWebClient().path("user/{id}", adminId).delete();
-    }
 
     protected static String json(final Response response) throws IOException {
         final Object entity = response.getEntity();
