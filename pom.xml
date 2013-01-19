@@ -101,7 +101,7 @@
                   <version>[3.0,)</version>
                 </requireMavenVersion>
                 <requireJavaVersion>
-                  <version>[1.7,)</version>
+                  <version>[1.${min-java.version},)</version>
                 </requireJavaVersion>
               </rules>
             </configuration>
@@ -110,39 +110,25 @@
       </plugin>
 
       <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <version>2.5.1</version>
+        <groupId>org.bsc.maven</groupId>
+        <artifactId>maven-processor-plugin</artifactId>
+        <version>2.1.0</version>
         <executions>
           <execution>
-            <id>generate-entity-metamodel</id>
-            <phase>generate-sources</phase>
+            <id>process</id>
             <goals>
-              <goal>compile</goal>
+              <goal>process</goal>
             </goals>
+            <phase>generate-sources</phase>
             <configuration>
-              <generatedSourcesDirectory>${project.build.directory}/generated-sources</generatedSourcesDirectory>
-              <compilerArguments>
-                <Aopenjpa.metamodel>true</Aopenjpa.metamodel>
-                <Aopenjpa.log>INFO</Aopenjpa.log>
-              </compilerArguments>
+              <compilerArguments>-Aopenjpa.source=${min-java.version} -Aopenjpa.metamodel=true</compilerArguments>
+              <processors>
+                <processor>org.apache.openjpa.persistence.meta.AnnotationProcessor6</processor>
+              </processors>
+              <outputDirectory>target/generated-sources/metamodel</outputDirectory>
             </configuration>
           </execution>
-          <execution>
-            <id>compile</id>
-            <phase>compile</phase>
-            <goals>
-              <goal>compile</goal>
-            </goals>
-          </execution>
         </executions>
-        <configuration>
-          <source>1.7</source>
-          <target>1.7</target>
-          <optimize>true</optimize>
-          <showWarnings>true</showWarnings>
-          <showDeprecation>true</showDeprecation>
-        </configuration>
         <dependencies>
           <dependency>
             <groupId>org.apache.openjpa</groupId>
@@ -150,6 +136,38 @@
             <version>${openjpa.version}</version>
           </dependency>
         </dependencies>
+      </plugin>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>build-helper-maven-plugin</artifactId>
+        <version>1.7</version>
+        <executions>
+          <execution>
+            <id>add-source</id>
+            <phase>generate-sources</phase>
+            <goals>
+              <goal>add-source</goal>
+            </goals>
+            <configuration>
+              <sources>
+                <source>target/generated-sources/metamodel</source>
+              </sources>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.0</version>
+        <configuration>
+          <source>1.${min-java.version}</source>
+          <target>1.${min-java.version}</target>
+          <optimize>true</optimize>
+          <showWarnings>true</showWarnings>
+          <showDeprecation>true</showDeprecation>
+        </configuration>
       </plugin>
       <plugin>
         <groupId>org.apache.openjpa</groupId>
@@ -209,6 +227,7 @@
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
+    <min-java.version>7</min-java.version>
     <cxf.version>2.6.4</cxf.version>
     <openjpa.version>2.2.0</openjpa.version>
     <openejb.version>4.5.2-SNAPSHOT</openejb.version>
