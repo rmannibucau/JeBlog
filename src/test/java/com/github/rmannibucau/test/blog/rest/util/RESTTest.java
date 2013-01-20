@@ -1,7 +1,6 @@
 package com.github.rmannibucau.test.blog.rest.util;
 
 import com.github.rmannibucau.blog.domain.Post;
-import com.github.rmannibucau.blog.rest.config.BlogApplication;
 import org.apache.cxf.jaxrs.client.JAXRSClientFactoryBean;
 import org.apache.cxf.jaxrs.client.WebClient;
 import org.apache.cxf.jaxrs.ext.form.Form;
@@ -29,10 +28,19 @@ public final class RESTTest {
     public static final String NAME = "admin";
     public static final String PWD = "adminpwd";
 
-    private static JSONProvider<Object> jsonProvider = new BlogApplication().jsonProvider();
+    private static JSONProvider<Object> jsonProvider = newJSonProvider();
 
     private RESTTest() {
         // no-op
+    }
+
+    private static JSONProvider<Object> newJSonProvider() {
+        final JSONProvider<Object> jsprovider = new JSONProvider<>();
+        jsprovider.setSkipJaxbChecks(true);
+        jsprovider.setDropRootElement(true);
+        jsprovider.setSupportUnwrapped(true);
+        jsprovider.setSingleJaxbContext(true);
+        return jsprovider;
     }
 
     public static String json(final Response response) throws IOException {

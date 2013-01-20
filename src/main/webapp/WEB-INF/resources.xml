@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources>
+  <Service id="json" class-name="org.apache.cxf.jaxrs.provider.json.JSONProvider">
+    SkipJaxbChecks = true
+    DropRootElement = true
+    SupportUnwrapped = true
+    SingleJaxbContext = true
+  </Service>
+</resources>

@@ -10,12 +10,19 @@
 
         # useless for our tests
         admin.disabled = true
+        ejbd.disabled = true
+        ejbds.disabled = true
 
         # predeploy the war, useless for a single test but avoid deployment/redeployment pattern for multiple tests
         openejb.arquillian.predeploy-archives = com.github.rmannibucau.test.blog.rest.util.ShrinkWraps
 
-        # for debug purpose
-        logging.level.org.apache.cxf.jaxrs = FINE
+        # useless service for our tests
+        admin.disabled = true
+
+        # cxf debug
+        # openejb.jul.forceReload = true
+        # org.apache.cxf.jaxrs.utils.JAXRSUtils.level = FINE
+        # org.apache.openejb.util.JuliLogStreamFactory$OpenEJBSimpleLayoutHandler.level = ALL
       </property>
     </configuration>
   </container>

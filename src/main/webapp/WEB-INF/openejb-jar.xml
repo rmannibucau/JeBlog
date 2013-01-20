@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openejb-jar xmlns="http://www.openejb.org/openejb-jar/1.1">
+  <pojo-deployment class-name="com.github.rmannibucau.blog.rest.config.BlogApplication">
+    <properties>
+      cxf.jaxrs.providers = json,com.github.rmannibucau.blog.rest.config.NotAuthorizedExceptionMapper
+      # cxf.jaxrs.static-resources-list = /favicon.ico
+    </properties>
+  </pojo-deployment>
+</openejb-jar>

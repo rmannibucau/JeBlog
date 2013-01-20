@@ -34,6 +34,8 @@ public final class ShrinkWraps {
                         // configuration
                 .addAsWebInfResource(new FileAsset(new File("src/main/webapp/WEB-INF/beans.xml")), "beans.xml")
                 .addAsWebInfResource(new FileAsset(new File("src/main/webapp/WEB-INF/persistence.xml")), "persistence.xml")
+                .addAsWebInfResource(new FileAsset(new File("src/main/webapp/WEB-INF/openejb-jar.xml")), "openejb-jar.xml")
+                .addAsWebInfResource(new FileAsset(new File("src/main/webapp/WEB-INF/resources.xml")), "resources.xml")
                         // spring-data-jpa dependencies
                 .addAsLibraries(jarLocation(EntityConverter.class))
                 .addAsLibraries(jarLocation(AdviceEntry.class))
