@@ -9,6 +9,7 @@ import com.github.rmannibucau.blog.rest.exception.NotAuthorizedException;
 import com.github.rmannibucau.blog.rest.service.post.form.FormPost;
 import com.github.rmannibucau.blog.rest.service.post.form.FormUpdatePost;
 import com.github.rmannibucau.blog.rest.service.user.UserService;
+import com.github.rmannibucau.blog.security.Authenticated;
 import org.springframework.data.domain.PageRequest;
 
 import javax.ejb.Lock;
@@ -45,6 +46,7 @@ public class PostService {
 
     @POST
     @Path("create")
+    @Authenticated
     public Post create(final @FormParam("") FormPost input, final @Context HttpServletRequest request) {
         final String currentUser = currentUser(request);
         final Post post = new Post();
@@ -55,6 +57,7 @@ public class PostService {
 
     @POST
     @Path("update")
+    @Authenticated
     public void update(final @FormParam("") FormUpdatePost input) {
         final Post post = posts.findOne(input.getId());
         if (post == null) {
@@ -71,12 +74,14 @@ public class PostService {
 
     @GET
     @Path("{id}")
+    @Authenticated
     public Post read(final @PathParam("id") long id) {
         return posts.findOne(id);
     }
 
     @DELETE
     @Path("{id}")
+    @Authenticated
     public void delete(final @PathParam("id") long id) {
         posts.delete(id);
     }

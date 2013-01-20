@@ -1,10 +1,11 @@
 package com.github.rmannibucau.test.blog.rest.service;
 
 import com.github.rmannibucau.blog.domain.Post;
-import com.github.rmannibucau.test.blog.rest.util.RESTTest;
 import org.apache.cxf.jaxrs.client.WebClient;
 import org.apache.cxf.jaxrs.ext.form.Form;
 import org.jboss.arquillian.junit.Arquillian;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -14,24 +15,35 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import static com.github.rmannibucau.test.blog.rest.util.RESTTest.createPost;
+import static com.github.rmannibucau.test.blog.rest.util.RESTTest.login;
+import static com.github.rmannibucau.test.blog.rest.util.RESTTest.logout;
+import static com.github.rmannibucau.test.blog.rest.util.RESTTest.newWebClient;
+import static com.github.rmannibucau.test.blog.rest.util.RESTTest.unserialize;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 @RunWith(Arquillian.class)
-public class PostServiceTest extends RESTTest {
+public class PostServiceTest {
+    private WebClient webClient;
+
+    @Before
+    public void doLogin() {
+        webClient = newWebClient();
+        login(webClient);
+    }
+
+    @After
+    public void doLogout() {
+        logout(webClient);
+    }
+
     @Test
     public void create() throws IOException {
-        final WebClient webClient = newWebClient();
-
-        final Response response;
-        try {
-            response = login(webClient).path("post/create")
-                .form(new Form().set("title", "supertitle").set("content", "supercontent").set("category", "supercategory"));
-        } finally {
-            logout(webClient);
-        }
+        final Response response = webClient.path("post/create")
+            .form(new Form().set("title", "supertitle").set("content", "supercontent").set("category", "supercategory"));
 
         final Post post = unserialize(Post.class, response);
         assertEquals("supertitle", post.getTitle());
@@ -40,7 +52,6 @@ public class PostServiceTest extends RESTTest {
 
     @Test
     public void read() throws IOException {
-        final WebClient webClient = newWebClient();
         long id = createPost(webClient, "read");
 
         final Post get = webClient.reset().path("post/{id}", id).get(Post.class);
@@ -52,7 +63,6 @@ public class PostServiceTest extends RESTTest {
 
     @Test
     public void update() throws IOException {
-        final WebClient webClient = newWebClient();
         long id = createPost(webClient, "update");
 
         final Response response = webClient.reset().path("post/update")
@@ -66,7 +76,6 @@ public class PostServiceTest extends RESTTest {
 
     @Test
     public void delete() throws IOException {
-        final WebClient webClient = newWebClient();
         long id = createPost(webClient, "delete");
 
         final Response response = webClient.reset().path("post/{id}", id).delete();
@@ -75,7 +84,6 @@ public class PostServiceTest extends RESTTest {
 
     @Test
     public void findAll() throws IOException {
-        final WebClient webClient = newWebClient();
         final Collection<Long> ids = new ArrayList<>();
         for (int i = 0; i < 10; i++) {
             ids.add(createPost(webClient, "delete #" + i));

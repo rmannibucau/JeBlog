@@ -21,54 +21,53 @@ import java.util.Collections;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.junit.Assert.assertThat;
 
-public abstract class RESTTest {
+public final class RESTTest {
     protected static final Annotation[] ANNOTATIONS = new Annotation[0];
     protected static final MediaType JSON = MediaType.APPLICATION_JSON_TYPE;
     protected static final MetadataMap<String,String> HEADERS = new MetadataMap<>();
-    protected static final String NAME = "admin";
-    protected static final String PWD = "adminpwd";
+
+    public static final String NAME = "admin";
+    public static final String PWD = "adminpwd";
 
     private static JSONProvider<Object> jsonProvider = new BlogApplication().jsonProvider();
 
-    protected static String json(final Response response) throws IOException {
+    private RESTTest() {
+        // no-op
+    }
+
+    public static String json(final Response response) throws IOException {
         final Object entity = response.getEntity();
         assertThat(entity, instanceOf(InputStream.class));
         return IO.slurp(InputStream.class.cast(entity));
     }
 
-    protected static WebClient newWebClient() {
+    public static WebClient newWebClient() {
         final JAXRSClientFactoryBean bean = new JAXRSClientFactoryBean();
         bean.setAddress("http://localhost:" + System.getProperty("httpejbd.port", "4204") + "/je-blog/");
         bean.setProperties(Collections.<String, Object>singletonMap(Message.MAINTAIN_SESSION, Boolean.TRUE));
         return bean.createWebClient();
     }
 
-    protected static <T> T unserialize(final Class<T> clazz, final Response response) throws IOException {
+    public static <T> T unserialize(final Class<T> clazz, final Response response) throws IOException {
         return (T) jsonProvider.readFrom((Class<Object>) clazz, clazz,
                                 ANNOTATIONS, JSON, HEADERS, new ByteArrayInputStream(json(response).getBytes()));
     }
 
-    protected static WebClient logout(final WebClient client) {
+    public static WebClient logout(final WebClient client) {
         client.reset().path("user/logout").head();
         client.reset();
         return client;
     }
 
-    protected static WebClient login(final WebClient client) {
+    public static WebClient login(final WebClient client) {
         client.reset().path("user/login").form(new Form().set("username", NAME).set("password", PWD));
         client.reset();
         return client;
     }
 
-    protected static long createPost(final WebClient webClient, final String name) throws IOException {
-        long id;
-        try {
-            id = unserialize(Post.class, login(webClient).path("post/create")
+    public static long createPost(final WebClient webClient, final String name) throws IOException {
+        return unserialize(Post.class, webClient.reset().path("post/create")
                     .form(new Form().set("title", name + " title").set("content", "read content").set("category", "read")))
                     .getId();
-        } finally {
-            logout(webClient);
-        }
-        return id;
     }
 }

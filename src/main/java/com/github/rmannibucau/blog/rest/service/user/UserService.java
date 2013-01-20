@@ -2,6 +2,7 @@ package com.github.rmannibucau.blog.rest.service.user;
 
 import com.github.rmannibucau.blog.dao.UserDao;
 import com.github.rmannibucau.blog.domain.User;
+import com.github.rmannibucau.blog.security.Authenticated;
 
 import javax.ejb.Lock;
 import javax.ejb.LockType;
@@ -53,16 +54,18 @@ public class UserService {
 
     @POST
     @Path("create")
+    @Authenticated
     public User create(final @FormParam("username") String name,
                        final @FormParam("password") String password,
                        final @FormParam("displayName") @DefaultValue(DEFAULT_DISPLAY_NAME) String displayName) {
         final User user = new User().login(name).password(password);
         setDisplayName(user, name, displayName);
-        return users.saveAndFlush(user);
+        return mask(users.saveAndFlush(user));
     }
 
     @POST
     @Path("{id}")
+    @Authenticated
     public User update(final @PathParam("id") long id,
                        final @FormParam("username") String name,
                        final @FormParam("password") String password,
@@ -70,11 +73,12 @@ public class UserService {
         final User user = users.findOne(id);
         user.login(name).password(password);
         setDisplayName(user, name, displayName);
-        return users.saveAndFlush(user);
+        return mask(users.saveAndFlush(user));
     }
 
     @DELETE
     @Path("{id}")
+    @Authenticated
     public void delete(final @PathParam("id") long id) {
         users.delete(id);
     }
@@ -82,7 +86,7 @@ public class UserService {
     @GET
     @Path("{id}")
     public User read(final @PathParam("id") long id) {
-        return users.findOne(id);
+        return mask(users.findOne(id));
     }
 
     public String currentUser(final HttpSession session) {
@@ -90,6 +94,11 @@ public class UserService {
             return null;
         }
         return (String) session.getAttribute(SESSION_USER);
+    }
+
+    private static User mask(final User one) {
+        one.setPassword("********");
+        return one;
     }
 
     private static void setDisplayName(final User user, final String name, final String displayName) {
