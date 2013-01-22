@@ -243,6 +243,13 @@
         <configuration>
           <tomeeClassifier>jaxrs</tomeeClassifier>
           <simpleLog>true</simpleLog>
+          <synchronization>
+            <extensions>
+              <extension>.js</extension>
+              <extension>.css</extension>
+              <extension>.html</extension>
+            </extensions>
+          </synchronization>
         </configuration>
       </plugin>
     </plugins>

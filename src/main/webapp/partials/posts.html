@@ -1,0 +1,14 @@
+<h1>Posts {{posts.length}}</h1>
+
+<div class="search">
+  Search: <input ng-model="query">
+</div>
+
+<div class="posts">
+  <ul>
+    <li ng-repeat="post in posts | filter:query">
+      <a href="#/post/{{post.id}}">{{post.title}}</a>
+      <p>{{post.content}}</p>
+    </li>
+  </ul>
+</div>

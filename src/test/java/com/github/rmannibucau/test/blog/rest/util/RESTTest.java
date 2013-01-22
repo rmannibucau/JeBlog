@@ -51,7 +51,7 @@ public final class RESTTest {
 
     public static WebClient newWebClient() {
         final JAXRSClientFactoryBean bean = new JAXRSClientFactoryBean();
-        bean.setAddress("http://localhost:" + System.getProperty("httpejbd.port", "4204") + "/je-blog/");
+        bean.setAddress("http://localhost:" + System.getProperty("httpejbd.port", "4204") + "/je-blog/api");
         bean.setProperties(Collections.<String, Object>singletonMap(Message.MAINTAIN_SESSION, Boolean.TRUE));
         return bean.createWebClient();
     }

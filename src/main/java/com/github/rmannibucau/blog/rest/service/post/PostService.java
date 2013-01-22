@@ -74,7 +74,6 @@ public class PostService {
 
     @GET
     @Path("{id}")
-    @Authenticated
     public Post read(final @PathParam("id") long id) {
         return posts.findOne(id);
     }
