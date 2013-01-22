@@ -13,6 +13,7 @@
     Password =
     JdbcUrl = jdbc:hsqldb:mem:jeblog
     MaxActive = 1
+    MaxIdle = 1
     JtaManaged = false
   </Resource>
 
