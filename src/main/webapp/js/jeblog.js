@@ -1,22 +1,32 @@
-// routing
+// routing + services
 angular.module('JeBlog', []).
-  config(['$routeProvider', function($routeProvider) {
+  config(['$routeProvider', '$locationProvider', '$httpProvider', function($routeProvider, $locationProvider, $httpProvider) {
     $routeProvider
         .when('/login', { templateUrl: 'partials/login.html', controller: LoginController })
         .when('/logout', { templateUrl: 'partials/waiting.html', controller: LogoutController  })
         .when('/', { templateUrl: 'partials/posts.html',   controller: PostsController })
         .when('/posts/:postId', {templateUrl: 'partials/post.html', controller: PostController })
         .otherwise({ redirectTo: '/' });
+
+        // $locationProvider.html5Mode(true);
+
+        $httpProvider.defaults.transformRequest = function(data){
+          return data != undefined ? $.param(data) : null;
+        }
   }]
-).config(function ($httpProvider) {
-    $httpProvider.defaults.transformRequest = function(data){
-        return data != undefined ? $.param(data) : null;
-    }
+).factory('user', function() {  
+    return {
+        name: null
+    };
 });
 
 // controllers
 
-function LoginController($scope, $http, $location, $rootScope) {
+function LogStateController($scope, user) {
+    $scope.name = user.name;
+}
+
+function LoginController($scope, $http, $location, user) {
     $scope.success = false;
     $scope.message = null;
 
@@ -26,8 +36,7 @@ function LoginController($scope, $http, $location, $rootScope) {
                     headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'}
                 })
                 .success(function(data) {
-                    $scope.message = "";
-                    $rootScope.username = "TODO"; // TODO: read it from data
+                    user.name = $scope.username;
                     $location.path("/");
                 })
                 .error(function(data){
@@ -36,13 +45,14 @@ function LoginController($scope, $http, $location, $rootScope) {
     }
 }
 
-function LogoutController($scope, $http, $location, $rootScope) {
+function LogoutController($scope, $http, $location, user) {
     $http.head('api/user/logout')
                 .success(function(data) {
-                    $rootScope.username = null;
+                    user.name = $scope.username;
                     $location.path("/");
                 })
                 .error(function(data){
+                    user.name = $scope.username;
                     $location.path("/");
                 });
 }
