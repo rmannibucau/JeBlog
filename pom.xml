@@ -243,7 +243,11 @@
         <configuration>
           <tomeeClassifier>jaxrs</tomeeClassifier>
           <simpleLog>true</simpleLog>
+          <systemVariables>
+            <tomee.skip-tld>true</tomee.skip-tld>
+          </systemVariables>
           <synchronization>
+            <updateInterval>3</updateInterval>
             <extensions>
               <extension>.js</extension>
               <extension>.css</extension>
