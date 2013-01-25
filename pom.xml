@@ -24,6 +24,11 @@
       <version>0.3-incubating</version>
     </dependency>
     <dependency>
+      <groupId>com.mysema.querydsl</groupId>
+      <artifactId>querydsl-jpa</artifactId>
+      <version>2.9.0</version>
+    </dependency>
+    <dependency>
       <groupId>org.springframework.data</groupId>
       <artifactId>spring-data-jpa</artifactId>
       <version>1.2.0.RELEASE</version>
@@ -243,9 +248,6 @@
         <configuration>
           <tomeeClassifier>jaxrs</tomeeClassifier>
           <simpleLog>true</simpleLog>
-          <systemVariables>
-            <tomee.skip-tld>true</tomee.skip-tld>
-          </systemVariables>
           <synchronization>
             <updateInterval>3</updateInterval>
             <extensions>
