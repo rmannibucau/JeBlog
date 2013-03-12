@@ -1,7 +1,5 @@
 package com.github.rmannibucau.blog.domain;
 
-import com.github.rmannibucau.blog.domain.xml.DateAdaptor;
-
 import javax.enterprise.inject.Typed;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -16,12 +14,7 @@ import javax.persistence.TemporalType;
 import javax.persistence.Version;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
-import javax.xml.bind.annotation.XmlType;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.util.Date;
 
 @Entity
@@ -30,15 +23,6 @@ import java.util.Date;
 @NamedQuery(
         name = User.FIND_BY_NAME_AND_PASSWORD,
         query = "select u from User u where u.login = :login and  u.password = :password")
-@XmlRootElement
-@XmlType(propOrder = {
-    "id",
-    "login",
-    "password",
-    "displayName",
-    "created"
-})
-@XmlAccessorType(XmlAccessType.FIELD)
 public class User {
     public static final String FIND_BY_NAME_AND_PASSWORD = "User.findByLoginAndPassword";
 
@@ -46,7 +30,6 @@ public class User {
     @GeneratedValue
     protected Long id;
 
-    @XmlJavaTypeAdapter(DateAdaptor.class)
     @Temporal(TemporalType.TIMESTAMP)
     protected Date created;
 

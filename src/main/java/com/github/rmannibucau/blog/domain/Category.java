@@ -1,7 +1,5 @@
 package com.github.rmannibucau.blog.domain;
 
-import com.github.rmannibucau.blog.domain.xml.DateAdaptor;
-
 import javax.enterprise.inject.Typed;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -11,31 +9,17 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Version;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
-import javax.xml.bind.annotation.XmlType;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.util.Date;
 
 @Entity
 @Typed
 @Table(name = "jeblog_category")
-@XmlRootElement
-@XmlType(propOrder = {
-        "id",
-        "name",
-        "description",
-        "created"
-})
-@XmlAccessorType(XmlAccessType.FIELD)
 public class Category {
     @Id
     @GeneratedValue
     protected Long id;
 
-    @XmlJavaTypeAdapter(DateAdaptor.class)
     @Temporal(TemporalType.TIMESTAMP)
     protected Date created;
 

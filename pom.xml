@@ -64,24 +64,6 @@
     </dependency>
     <dependency>
       <groupId>org.apache.openejb</groupId>
-      <artifactId>openejb-cxf-rs</artifactId>
-      <version>${openejb.version}</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.cxf</groupId>
-      <artifactId>cxf-rt-frontend-jaxrs</artifactId>
-      <version>${cxf.version}</version>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.cxf</groupId>
-      <artifactId>cxf-rt-rs-extension-providers</artifactId>
-      <version>${cxf.version}</version>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.openejb</groupId>
       <artifactId>ziplock</artifactId>
       <version>${tomee.version}</version>
       <scope>test</scope>
@@ -244,16 +226,14 @@
       <plugin>
         <groupId>org.apache.openejb.maven</groupId>
         <artifactId>tomee-maven-plugin</artifactId>
-        <version>1.5.2-SNAPSHOT</version>
+        <version>${tomee.version}</version>
         <configuration>
-          <tomeeClassifier>jaxrs</tomeeClassifier>
           <simpleLog>true</simpleLog>
+          <context>ROOT</context>
           <synchronization>
             <updateInterval>3</updateInterval>
             <extensions>
-              <extension>.js</extension>
-              <extension>.css</extension>
-              <extension>.html</extension>
+              <extension>.xhtml</extension>
             </extensions>
           </synchronization>
         </configuration>
@@ -267,10 +247,9 @@
     <metamodel.path>target/generated-sources/metamodel</metamodel.path>
 
     <min-java.version>7</min-java.version>
-    <cxf.version>2.6.4</cxf.version>
     <openjpa.version>2.2.0</openjpa.version>
-    <openejb.version>4.5.2-SNAPSHOT</openejb.version>
-    <tomee.version>1.5.2-SNAPSHOT</tomee.version>
+    <openejb.version>4.6.0-SNAPSHOT</openejb.version>
+    <tomee.version>1.6.0-SNAPSHOT</tomee.version>
   </properties>
 
   <repositories>

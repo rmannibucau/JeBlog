@@ -1,9 +1,5 @@
 package com.github.rmannibucau.blog.domain;
 
-import com.github.rmannibucau.blog.domain.xml.AuthorAdaptor;
-import com.github.rmannibucau.blog.domain.xml.CategoryAdaptor;
-import com.github.rmannibucau.blog.domain.xml.DateAdaptor;
-
 import javax.enterprise.inject.Typed;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -18,12 +14,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Version;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
-import javax.xml.bind.annotation.XmlType;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -31,16 +22,6 @@ import java.util.List;
 @Entity
 @Typed
 @Table(name = "jeblog_post")
-@XmlRootElement
-@XmlType(propOrder = {
-        "id",
-        "title",
-        "content",
-        "category",
-        "author",
-        "created"
-})
-@XmlAccessorType(XmlAccessType.FIELD)
 public class Post {
     public static enum Status {
         DRAFT, PUBLISHED
@@ -50,7 +31,6 @@ public class Post {
     @GeneratedValue
     protected Long id;
 
-    @XmlJavaTypeAdapter(DateAdaptor.class)
     @Temporal(TemporalType.TIMESTAMP)
     protected Date created;
 
@@ -68,11 +48,9 @@ public class Post {
     private String content;
 
     @ManyToOne
-    @XmlJavaTypeAdapter(CategoryAdaptor.class)
     private Category category;
 
     @ManyToOne
-    @XmlJavaTypeAdapter(AuthorAdaptor.class)
     private User author;
 
     @XmlTransient

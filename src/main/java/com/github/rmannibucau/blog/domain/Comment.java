@@ -1,8 +1,5 @@
 package com.github.rmannibucau.blog.domain;
 
-import com.github.rmannibucau.blog.domain.xml.DateAdaptor;
-import com.github.rmannibucau.blog.domain.xml.PostIdAdapter;
-
 import javax.enterprise.inject.Typed;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -16,28 +13,12 @@ import javax.persistence.TemporalType;
 import javax.persistence.Version;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
-import javax.xml.bind.annotation.XmlType;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.util.Date;
 
 @Entity
 @Typed
 @Table(name = "jeblog_comment")
-@XmlRootElement
-@XmlType(propOrder = {
-        "id",
-        "post",
-        "author",
-        "email",
-        "status",
-        "content",
-        "created"
-})
-@XmlAccessorType(XmlAccessType.FIELD)
 public class Comment {
     public static enum Status {
         PENDING, APPROVED
@@ -47,7 +28,6 @@ public class Comment {
     @GeneratedValue
     protected Long id;
 
-    @XmlJavaTypeAdapter(DateAdaptor.class)
     @Temporal(TemporalType.TIMESTAMP)
     protected Date created;
 
@@ -72,7 +52,6 @@ public class Comment {
 
     @NotNull
     @ManyToOne
-    @XmlJavaTypeAdapter(PostIdAdapter.class)
     private Post post;
 
     @PrePersist
