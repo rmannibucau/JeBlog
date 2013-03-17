@@ -1,0 +1,22 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+<ui:composition template="/WEB-INF/layout.xhtml">
+  <ui:define name="content">
+    <p:dataList value="#{indexController}" var="post" lazy="true" type="none"
+                rows="#{indexController.pageSize}" rowsPerPageTemplate="5,10,15,20,50"
+                paginator="true"
+                paginatorTemplate="{FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}">
+      <p:column>
+        <h2><h:outputText value="#{post.title}" /></h2>
+        <p>
+          <h:outputText value="#{post.content}" />
+        </p>
+      </p:column>
+    </p:dataList>
+  </ui:define>
+</ui:composition>
+</html>

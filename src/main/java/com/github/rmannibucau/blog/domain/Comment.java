@@ -14,12 +14,13 @@ import javax.persistence.Version;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlTransient;
+import java.io.Serializable;
 import java.util.Date;
 
 @Entity
 @Typed
 @Table(name = "jeblog_comment")
-public class Comment {
+public class Comment implements Serializable {
     public static enum Status {
         PENDING, APPROVED
     }

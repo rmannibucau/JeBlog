@@ -10,12 +10,13 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Version;
 import javax.xml.bind.annotation.XmlTransient;
+import java.io.Serializable;
 import java.util.Date;
 
 @Entity
 @Typed
 @Table(name = "jeblog_category")
-public class Category {
+public class Category implements Serializable {
     @Id
     @GeneratedValue
     protected Long id;
@@ -33,6 +34,7 @@ public class Category {
 
     @Column(unique = true)
     private String name;
+
     private String description;
 
 

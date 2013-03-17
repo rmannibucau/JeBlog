@@ -15,6 +15,7 @@ import javax.persistence.Version;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlTransient;
+import java.io.Serializable;
 import java.util.Date;
 
 @Entity
@@ -23,7 +24,7 @@ import java.util.Date;
 @NamedQuery(
         name = User.FIND_BY_NAME_AND_PASSWORD,
         query = "select u from User u where u.login = :login and  u.password = :password")
-public class User {
+public class User implements Serializable {
     public static final String FIND_BY_NAME_AND_PASSWORD = "User.findByLoginAndPassword";
 
     @Id

@@ -1,6 +1,5 @@
 package com.github.rmannibucau.test.blog.rest.util;
 
-import com.mysema.query.jpa.JPQLSubQuery;
 import org.apache.deltaspike.core.api.provider.BeanProvider;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
@@ -47,7 +46,6 @@ public final class ShrinkWraps {
                 .addAsLibraries(jarLocation(ObjectOptimisticLockingFailureException.class))
                 .addAsLibraries(jarLocation(DaoSupport.class))
                 .addAsLibraries(jarLocation(JpaRepository.class))
-                .addAsLibraries(jarLocation(JPQLSubQuery.class))
                         // deltaspike dependencies
                 .addAsLibraries(jarLocation(BeanProvider.class));
     }

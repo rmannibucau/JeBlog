@@ -15,6 +15,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Version;
 import javax.xml.bind.annotation.XmlTransient;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -22,7 +23,7 @@ import java.util.List;
 @Entity
 @Typed
 @Table(name = "jeblog_post")
-public class Post {
+public class Post implements Serializable {
     public static enum Status {
         DRAFT, PUBLISHED
     }
