@@ -12,9 +12,12 @@
                 paginatorTemplate="{FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}">
       <p:column>
         <h2><h:outputText value="#{post.title}" /></h2>
-        <p>
+        <div class="article">
           <h:outputText value="#{post.content}" />
-        </p>
+        </div>
+        <div class="articleFooter">
+          <h:outputText value="Created on #{post.created}" />
+        </div>
       </p:column>
     </p:dataList>
   </ui:define>

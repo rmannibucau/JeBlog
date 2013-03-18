@@ -67,6 +67,8 @@ public class Post implements Serializable {
         if (status == null) {
             status = Status.DRAFT;
         }
+        created = new Date();
+        modified = created;
     }
 
     public String getTitle() {

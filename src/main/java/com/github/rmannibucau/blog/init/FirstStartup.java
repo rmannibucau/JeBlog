@@ -16,7 +16,6 @@ public class FirstStartup {
     @Inject
     private UserDao users;
 
-
     @PostConstruct
     public void init() {
         if (users.count() == 0) {
@@ -33,12 +32,12 @@ public class FirstStartup {
     @Inject
     private PostDao posts;
     private void tmp() {
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 100; i++) {
             final Post post = new Post();
             post.setAuthor(users.findAll().iterator().next());
             post.setContent("bla " + i);
             post.setStatus(Post.Status.PUBLISHED);
-            post.setTitle("p1 #" + i);
+            post.setTitle("p_" + i);
             posts.save(post);
         }
     }
