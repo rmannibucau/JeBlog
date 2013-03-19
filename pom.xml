@@ -90,6 +90,26 @@
       <version>${tomee.version}</version>
       <scope>test</scope>
     </dependency>
+
+    <!-- debugging -->
+    <dependency>
+      <groupId>org.apache.myfaces.core</groupId>
+      <artifactId>myfaces-impl</artifactId>
+      <version>2.1.10</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.openejb</groupId>
+      <artifactId>openejb-core</artifactId>
+      <version>4.6.0-SNAPSHOT</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.openejb</groupId>
+      <artifactId>tomee-catalina</artifactId>
+      <version>1.6.0-SNAPSHOT</version>
+      <scope>provided</scope>
+    </dependency>
   </dependencies>
 
   <build>
@@ -267,6 +287,8 @@
             <updateInterval>3</updateInterval>
             <extensions>
               <extension>.xhtml</extension>
+              <extension>.css</extension>
+              <extension>.js</extension>
             </extensions>
           </synchronization>
         </configuration>

@@ -3,26 +3,54 @@
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:p="http://primefaces.org/ui"
-      xmlns:ui="http://java.sun.com/jsf/facelets">
+      xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:f="http://java.sun.com/jsf/html">
 <h:head>
   <title>JeBlog</title>
+  <title>Bootstrap, from Twitter</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="A JavaEE Blogs" />
+  <h:outputStylesheet library="css" name="bootstrap.min.css" />
+  <h:outputStylesheet library="css" name="bootstrap-responsive.min.css" />
+  <style type="text/css">
+    body {
+      padding-top: 70px;
+      padding-bottom: 30px;
+    }
+  </style>
 </h:head>
 <h:body>
-  <p:layout fullPage="true">
-    <p:layoutUnit id="top" position="north">
-      <h:outputText value="Welcome #{userController.name}." />
-      <h:form>
-        <p:menubar>
-          <p:menuitem value="Login" outcome="#{userController.loginPage}" rendered="#{!userController.logged}"/>
-          <p:menuitem value="Logout" action="#{userController.logout}" ajax="false" rendered="#{userController.logged}" icon="ui-icon-close" />
-        </p:menubar>
-      </h:form>
-    </p:layoutUnit>
+  <h:outputStylesheet library="css" name="jeblog.css" />
 
-    <p:layoutUnit position="center">
-      <ui:insert name="content"/>
-    </p:layoutUnit>
-  </p:layout>
+  <div class="container">
+    <div class="masthead">
+      <h3 class="muted">Project name</h3>
+      <div class="navbar">
+        <div class="navbar-inner">
+          <div class="container">
+            <ul class="nav">
+              <li><h:link outcome="#{menuController.homePage}" value="JeBlog" /></li>
+              <li>
+                <f:form id="log-form">
+                  <h:commandLink styleClass="menu-text" actionListener="#{userController.logout}" rendered="#{userController.logged}" value="Logout"/>
+                </f:form>
+              </li>
+              <li><h:link outcome="#{userController.loginPage}" value="Login" rendered="#{!userController.logged}" /></li>
+              <li><h:outputText styleClass="menu-text" value="Welcome #{userController.name}." /></li>
+            </ul>
+          </div>
+        </div>
+      </div><!-- /.navbar -->
+    </div>
+
+    <ui:insert name="content" />
+    <hr />
+
+    <div class="footer">
+      <p>&copy; JeBlog - @rmannibucau</p>
+    </div>
+  </div>
+
+  <h:outputScript library="js" name="jquery.min.js" />
+  <h:outputScript library="js" name="bootstrap.min.js" />
 </h:body>
 </html>
