@@ -7,6 +7,9 @@ import com.github.rmannibucau.blog.domain.User;
 import org.apache.commons.lang3.RandomStringUtils;
 
 import javax.annotation.PostConstruct;
+import javax.annotation.Resource;
+import javax.ejb.Asynchronous;
+import javax.ejb.SessionContext;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
 import javax.inject.Inject;
@@ -18,6 +21,9 @@ public class FirstStartup {
     @Inject
     private UserDao users;
 
+    @Resource
+    private SessionContext sc;
+
     @PostConstruct
     public void init() {
         if (users.count() == 0) {
@@ -27,13 +33,15 @@ public class FirstStartup {
             user.setPassword("adminpwd");
             users.saveAndFlush(user);
 
-            tmp();
+            sc.getBusinessObject(FirstStartup.class).tmp();
         }
     }
 
     @Inject
     private PostDao posts;
-    private void tmp() {
+
+    @Asynchronous
+    public void tmp() {
         final Random random = new Random();
         for (int i = 0; i < 100; i++) {
             final Post post = new Post();
