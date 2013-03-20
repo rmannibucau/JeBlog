@@ -6,37 +6,39 @@
       xmlns:ui="http://java.sun.com/jsf/facelets">
 <ui:composition template="/WEB-INF/layout.xhtml">
   <ui:define name="content">
-    <ui:repeat id="posts" value="#{indexController.posts}" var="post">
-      <div class="post">
-        <h2><h:outputText value="#{post.title}" /></h2>
-        <div class="article">
-          <h:outputText value="#{post.content}" />
+    <div id="posts">
+      <ui:repeat value="#{indexController.posts}" var="post">
+        <div class="post">
+          <h2><h:outputText value="#{post.title}" /></h2>
+          <div class="article">
+            <h:outputText value="#{post.content}" />
+          </div>
+          <div class="article-footer">
+            <h:outputText value="Created on #{post.created}" />
+          </div>
         </div>
-        <div class="article-footer">
-          <h:outputText value="Created on #{post.created}" />
-        </div>
-      </div>
-    </ui:repeat>
+      </ui:repeat>
 
-    <f:form id="post-navigation">
-      <div class="btn-toolbar">
-        <div class="btn-group">
-          <h:commandLink styleClass="btn" actionListener="#{indexController.beginning}" update="posts">
-            <i class="icon-step-backward" />
-          </h:commandLink>
-          <h:commandLink styleClass="btn" actionListener="#{indexController.previousPage}" rendered="#{indexController.hasPrevious}" update="posts">
-            <i class="icon-backward" />
-          </h:commandLink>
-          <h:outputText styleClass="btn" value="#{indexController.current}" />
-          <h:commandLink styleClass="btn" actionListener="#{indexController.nextPage}" rendered="#{indexController.hasNext}" update="posts">
-            <i class="icon-forward" />
-          </h:commandLink>
-          <h:commandLink styleClass="btn" actionListener="#{indexController.end}" update="posts">
-            <i class="icon-step-forward" />
-          </h:commandLink>
+      <f:form id="post-navigation">
+        <div class="btn-toolbar">
+          <div class="btn-group">
+            <h:commandLink styleClass="btn" actionListener="#{indexController.beginning}" update="posts">
+              <i class="icon-step-backward" />
+            </h:commandLink>
+            <h:commandLink styleClass="btn" actionListener="#{indexController.previousPage}" rendered="#{indexController.hasPrevious}" update="posts">
+              <i class="icon-backward" />
+            </h:commandLink>
+            <h:outputText styleClass="btn" value="#{indexController.current}" />
+            <h:commandLink styleClass="btn" actionListener="#{indexController.nextPage}" rendered="#{indexController.hasNext}" update="posts">
+              <i class="icon-forward" />
+            </h:commandLink>
+            <h:commandLink styleClass="btn" actionListener="#{indexController.end}" update="posts">
+              <i class="icon-step-forward" />
+            </h:commandLink>
+          </div>
         </div>
-      </div>
-    </f:form>
+      </f:form>
+    </div>
   </ui:define>
 </ui:composition>
 </html>

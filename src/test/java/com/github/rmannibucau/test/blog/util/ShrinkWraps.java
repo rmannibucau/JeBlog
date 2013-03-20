@@ -1,4 +1,4 @@
-package com.github.rmannibucau.test.blog.rest.util;
+package com.github.rmannibucau.test.blog.util;
 
 import org.apache.deltaspike.core.api.provider.BeanProvider;
 import org.jboss.arquillian.container.test.api.Deployment;

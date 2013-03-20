@@ -26,22 +26,31 @@ public class FirstStartup {
 
     @PostConstruct
     public void init() {
-        if (users.count() == 0) {
-            final User user = new User();
-            user.setLogin("admin");
-            user.setDisplayName("Admin");
-            user.setPassword("adminpwd");
-            users.saveAndFlush(user);
+        sc.getBusinessObject(FirstStartup.class).doInit();
+    }
 
-            sc.getBusinessObject(FirstStartup.class).tmp();
+    @Asynchronous
+    public void doInit() {
+        if (users.count() == 0) {
+            addDefaultUser();
+            addSomeData();
+
+
         }
+    }
+
+    private void addDefaultUser() {
+        final User user = new User();
+        user.setLogin("admin");
+        user.setDisplayName("Admin");
+        user.setPassword("adminpwd");
+        users.saveAndFlush(user);
     }
 
     @Inject
     private PostDao posts;
-
-    @Asynchronous
-    public void tmp() {
+    private void addSomeData() {
+        // to clean up once done
         final Random random = new Random();
         for (int i = 0; i < 100; i++) {
             final Post post = new Post();
