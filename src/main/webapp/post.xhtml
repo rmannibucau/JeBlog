@@ -1,0 +1,23 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+<ui:composition template="/WEB-INF/layout.xhtml">
+  <ui:define name="content">
+    <div id="post">
+      <h2>
+        <h:outputText value="#{post.current.title}" />
+      </h2>
+
+      <div class="article">
+        <h:outputText value="#{post.current.content}" />
+      </div>
+
+      <div class="article-footer">
+        <h:outputText value="Created on #{post.current.created}" />
+      </div>
+    </div>
+  </ui:define>
+</ui:composition>
+</html>

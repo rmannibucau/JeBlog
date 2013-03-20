@@ -4,6 +4,7 @@ import com.github.rmannibucau.blog.dao.PostDao;
 import com.github.rmannibucau.blog.dao.Repository;
 import com.github.rmannibucau.blog.domain.Post;
 import org.apache.deltaspike.core.api.config.annotation.ConfigProperty;
+import org.apache.deltaspike.core.api.config.view.metadata.ViewConfigResolver;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -15,12 +16,15 @@ import javax.inject.Named;
 import java.io.Serializable;
 import java.util.List;
 
-@Named
+@Named("index")
 @ViewScoped
 public class IndexController implements Serializable {
     @Inject
     @Repository
     private PostDao posts;
+
+    @Inject
+    private ViewConfigResolver configResolver;
 
     @Inject
     @ConfigProperty(name = "jeblog.page-size", defaultValue = "15")
@@ -71,5 +75,9 @@ public class IndexController implements Serializable {
 
         final PageRequest pageable = new PageRequest(idx, pageSize, new Sort(Sort.Direction.DESC, "created"));
         page = posts.findByStatus(Post.Status.PUBLISHED, pageable);
+    }
+
+    public Class<? extends Navigation> getPostPage() {
+        return Navigation.Post.class;
     }
 }

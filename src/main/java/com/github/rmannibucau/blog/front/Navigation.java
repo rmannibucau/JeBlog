@@ -12,5 +12,8 @@ public interface Navigation extends ViewConfig {
     public static class Login implements Navigation {}
 
     @View
+    public static class Post implements Navigation {}
+
+    @View
     public static interface SecuredNavigation extends Navigation {}
 }

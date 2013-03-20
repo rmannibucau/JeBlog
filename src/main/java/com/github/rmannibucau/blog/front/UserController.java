@@ -11,7 +11,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.Serializable;
 
-@Named
+@Named("user")
 @SessionScoped
 public class UserController implements Serializable {
     private static final String ANONYMOUS = "Guest";

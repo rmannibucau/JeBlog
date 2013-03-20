@@ -10,14 +10,14 @@
         <h:messages id="messages" showDetail="true" autoUpdate="true"/>
 
         <h:outputLabel for="login" value="Login:"/>
-        <h:inputText id="login" value="#{userController.name}" required="true"/>
+        <h:inputText id="login" value="#{user.name}" required="true"/>
         <br />
 
         <h:outputLabel for="password" value="Password:"/>
-        <h:inputSecret id="password" value="#{userController.password}" required="true"/>
+        <h:inputSecret id="password" value="#{user.password}" required="true"/>
         <br />
 
-        <h:commandButton styleClass="btn btn-large btn-primary" value="Login" action="#{userController.login}"/>
+        <h:commandButton styleClass="btn btn-large btn-primary" value="Login" action="#{user.login}"/>
       </h:form>
     </div>
 

@@ -28,25 +28,19 @@
         <div class="navbar-inner">
           <div class="container">
             <ul class="nav">
-              <li><h:link outcome="#{menuController.homePage}" value="JeBlog" /></li>
+              <li><h:link outcome="#{menu.homePage}" value="JeBlog" /></li>
               <li>
                 <h:form id="log-form">
-                  <h:commandLink styleClass="menu-text" actionListener="#{userController.logout}" rendered="#{userController.logged}" value="Logout"/>
+                  <h:commandLink styleClass="menu-text" actionListener="#{user.logout}" rendered="#{user.logged}" value="Logout"/>
                 </h:form>
               </li>
-              <li><h:link outcome="#{userController.loginPage}" value="Login" rendered="#{!userController.logged}" /></li>
-              <li><h:outputText styleClass="menu-text" value="Welcome #{userController.name}." /></li>
+              <li><h:link outcome="#{user.loginPage}" value="Login" rendered="#{!user.logged}" /></li>
+              <li><h:outputText styleClass="menu-text" value="Welcome #{user.name}." /></li>
             </ul>
           </div>
         </div>
-      </div><!-- /.navbar -->
+      </div>
     </div>
-
-    <div>
-      <h1>Foo stuff!</h1>
-      <p class="lead">Welcome message.</p>
-    </div>
-    <hr />
 
     <ui:insert name="content" />
     <hr />
