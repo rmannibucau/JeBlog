@@ -22,22 +22,21 @@
   <h:outputStylesheet library="css" name="jeblog.css" />
 
   <div class="container">
-    <div class="masthead">
-      <h3 class="muted">Project name</h3>
-      <div class="navbar">
-        <div class="navbar-inner">
-          <div class="container">
-            <ul class="nav">
-              <li><h:link outcome="#{menu.homePage}" value="JeBlog" /></li>
-              <li>
-                <h:form id="log-form">
-                  <h:commandLink styleClass="menu-text" actionListener="#{user.logout}" rendered="#{user.logged}" value="Logout"/>
-                </h:form>
-              </li>
-              <li><h:link outcome="#{user.loginPage}" value="Login" rendered="#{!user.logged}" /></li>
-              <li><h:outputText styleClass="menu-text" value="Welcome #{user.name}." /></li>
-            </ul>
-          </div>
+    <h3 class="muted">Project name</h3>
+    <div class="navbar">
+      <div class="navbar-inner">
+        <div class="container">
+          <ul class="nav">
+            <li><h:link outcome="#{menu.homePage}" value="JeBlog" /></li>
+            <li>
+              <h:form id="log-form">
+                <h:commandLink styleClass="menu-text" action="#{menu.getHomePage}" actionListener="#{user.logout}" rendered="#{user.logged}" value="Logout"/>
+              </h:form>
+            </li>
+            <li><h:link outcome="#{user.loginPage}" value="Login" rendered="#{!user.logged}" /></li>
+            <li><h:link outcome="#{user.createPost}" value="Create a post" rendered="#{user.logged}" /></li>
+            <li><h:outputText styleClass="menu-text" value="Welcome #{user.name}." /></li>
+          </ul>
         </div>
       </div>
     </div>

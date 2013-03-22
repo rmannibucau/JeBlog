@@ -1010,7 +1010,7 @@ select, textarea, input[type="text"], input[type="password"], input[type="dateti
 }
 
 input, textarea, .uneditable-input {
-    width: 206px
+    width: 100%
 }
 
 textarea {
@@ -1056,7 +1056,7 @@ select, input[type="file"] {
 }
 
 select {
-    width: 220px;
+    width: 100%;
     background-color: #fff;
     border: 1px solid #ccc
 }

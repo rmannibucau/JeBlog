@@ -11,11 +11,11 @@
       </h2>
 
       <div class="article">
-        <h:outputText value="#{post.current.content}" />
+        <h:outputText value="#{post.current.content}" escape="false" />
       </div>
 
       <div class="article-footer">
-        <h:outputText value="Created on #{post.current.created}" />
+        <h:outputText value="Created on #{post.current.created}" /> | <h:outputText value="Modified on #{post.current.modified}" /> | <h:outputText value="Author is #{post.current.author}" />
       </div>
     </div>
   </ui:define>

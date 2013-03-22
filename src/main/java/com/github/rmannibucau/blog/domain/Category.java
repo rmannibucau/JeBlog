@@ -37,7 +37,6 @@ public class Category implements Serializable {
 
     private String description;
 
-
     public String getName() {
         return name;
     }

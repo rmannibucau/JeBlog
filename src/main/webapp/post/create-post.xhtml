@@ -1,0 +1,39 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+<ui:composition template="/WEB-INF/layout.xhtml">
+  <ui:define name="content">
+    <div class="container" style="width: 100%;">
+      <h:form id="create-post" styleClass="create-post">
+        <h:messages id="messages" showDetail="true" autoUpdate="true"/>
+
+        <h:outputLabel for="title" value="Title:"/>
+        <h:inputText id="title" value="#{createPost.post.title}" required="true"/>
+        <br />
+
+        <h:outputLabel for="content" value="Content:"/>
+        <h:inputTextarea rows="10" id="content" value="#{createPost.post.content}" required="true"/>
+        <br />
+
+        <h:outputLabel for="category" value="Category:"/>
+        <h:selectOneListbox id="category" value="#{createPost.post.category}">
+          <f:selectItems value="#{createPost.availableCategories}" var="c" itemValue="#{c}" itemLabel="#{c.name}" />
+        </h:selectOneListbox>
+        <br />
+
+        <h:outputLabel for="status" value="Status:"/>
+        <h:selectOneListbox id="status" value="#{createPost.post.status}">
+          <f:selectItems value="#{createPost.availableStatus}" var="s" itemValue="#{s}" itemLabel="#{s}" />
+        </h:selectOneListbox>
+        <br />
+
+        <h:commandButton styleClass="btn btn-large btn-primary" value="Blog!" action="#{createPost.save}"/>
+      </h:form>
+    </div>
+
+  </ui:define>
+</ui:composition>
+</html>

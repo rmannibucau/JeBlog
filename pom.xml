@@ -31,6 +31,11 @@
     </dependency>
 
     <dependency>
+      <groupId>org.markdownj</groupId>
+      <artifactId>markdownj</artifactId>
+      <version>0.3.0-1.0.2b4</version>
+    </dependency>
+    <dependency>
       <groupId>org.apache.commons</groupId>
       <artifactId>commons-lang3</artifactId>
       <version>3.1</version>
@@ -95,13 +100,6 @@
       <artifactId>ziplock</artifactId>
       <version>${tomee.version}</version>
       <scope>test</scope>
-    </dependency>
-
-    <dependency>
-      <groupId>org.apache.myfaces.core</groupId>
-      <artifactId>myfaces-impl</artifactId>
-      <version>2.1.10</version>
-      <scope>provided</scope>
     </dependency>
   </dependencies>
 
@@ -276,12 +274,16 @@
         <configuration>
           <simpleLog>true</simpleLog>
           <context>ROOT</context>
+          <reloadOnUpdate>true</reloadOnUpdate>
           <synchronization>
-            <updateInterval>3</updateInterval>
+            <updateInterval>5</updateInterval>
+            <updateOnlyExtensions>
+              <updateOnlyExtension>.xhtml</updateOnlyExtension>
+              <updateOnlyExtension>.css</updateOnlyExtension>
+              <updateOnlyExtension>.js</updateOnlyExtension>
+            </updateOnlyExtensions>
             <extensions>
-              <extension>.xhtml</extension>
-              <extension>.css</extension>
-              <extension>.js</extension>
+              <extension>.class</extension>
             </extensions>
           </synchronization>
         </configuration>

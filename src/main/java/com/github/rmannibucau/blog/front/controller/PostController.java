@@ -1,8 +1,9 @@
-package com.github.rmannibucau.blog.front;
+package com.github.rmannibucau.blog.front.controller;
 
 import com.github.rmannibucau.blog.dao.PostDao;
 import com.github.rmannibucau.blog.dao.Repository;
 import com.github.rmannibucau.blog.domain.Post;
+import com.github.rmannibucau.blog.front.dto.PostDto;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.RequestScoped;
@@ -18,20 +19,23 @@ public class PostController {
     @Repository
     private PostDao posts;
 
-    private Post post;
+    private PostDto post;
 
     @PostConstruct
     public void findPost() {
         final Map<String, String> map = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
         if (map.containsKey("id")) {
-            post = posts.findOne(Long.parseLong(map.get("id")));
+            final Post p = posts.findOne(Long.parseLong(map.get("id")));
+            post = new PostDto(p.getId(), p.getTitle(), p.getHtml(),
+                                p.getCreated(), p.getModified(),
+                                p.getAuthor().getDisplayName(),
+                                p.getCategoryAsString(), p.getStatus());
         } else {
-            post = new Post();
-            post.setContent("Post not found");
+            post = new PostDto(-1, "Not found", "No post id specified", null, null, null, null, null);
         }
     }
 
-    public Post getCurrent() {
+    public PostDto getCurrent() {
         return post;
     }
 }

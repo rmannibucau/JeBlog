@@ -13,7 +13,7 @@
         ejbds.disabled = true
 
         # predeploy the war, useless for a single test but avoid deployment/redeployment pattern for multiple tests
-        openejb.arquillian.predeploy-archives = com.github.rmannibucau.test.blog.rest.util.ShrinkWraps
+        # openejb.arquillian.predeploy-archives = com.github.rmannibucau.test.blog.util.ShrinkWraps
 
         # cxf debug
         # openejb.jul.forceReload = true

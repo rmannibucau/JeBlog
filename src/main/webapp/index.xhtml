@@ -23,11 +23,11 @@
           </h2>
 
           <div class="article">
-            <h:outputText value="#{it.content}" />
+            <h:outputText value="#{it.content}" escape="false" />
           </div>
 
           <div class="article-footer">
-            <h:outputText value="Created on #{it.created}" />
+            <h:outputText value="Created on #{it.created}" /> | <h:outputText value="Modified on #{it.modified}" /> | <h:outputText value="Author is #{it.author}" />
           </div>
         </div>
 

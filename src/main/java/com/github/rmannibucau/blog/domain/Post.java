@@ -1,5 +1,7 @@
 package com.github.rmannibucau.blog.domain;
 
+import com.petebevin.markdown.MarkdownProcessor;
+
 import javax.enterprise.inject.Typed;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -10,6 +12,7 @@ import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -24,7 +27,7 @@ import java.util.List;
 @Typed
 @Table(name = "jeblog_post")
 public class Post implements Serializable {
-    public static enum Status {
+    public enum Status {
         DRAFT, PUBLISHED
     }
 
@@ -48,6 +51,9 @@ public class Post implements Serializable {
     @Lob
     private String content;
 
+    @Lob
+    private String html;
+
     @ManyToOne
     private Category category;
 
@@ -63,12 +69,35 @@ public class Post implements Serializable {
     private List<Comment> comments;
 
     @PrePersist
-    public void forceStatus() {
+    public void forceStatusAndAudit() {
         if (status == null) {
             status = Status.DRAFT;
         }
-        created = new Date();
-        modified = created;
+
+        modified();
+        created = modified;
+
+        computeHtml();
+    }
+
+    @PreUpdate
+    public void computeHtml() {
+        if (content != null) {
+            final String newHtml = new MarkdownProcessor().markdown(content);
+            if (!newHtml.equals(html)) {
+                modified();
+            }
+            html = newHtml;
+        } else {
+            if (html != null) {
+                modified();
+            }
+            html = null;
+        }
+    }
+
+    private void modified() {
+        modified = new Date();
     }
 
     public String getTitle() {
@@ -89,6 +118,13 @@ public class Post implements Serializable {
 
     public Category getCategory() {
         return category;
+    }
+
+    public String getCategoryAsString() {
+        if (category == null) {
+            return null;
+        }
+        return category.getName();
     }
 
     public void setCategory(final Category category) {
@@ -130,12 +166,24 @@ public class Post implements Serializable {
         return created;
     }
 
+    public void setCreated(Date created) {
+        this.created = created;
+    }
+
+    public void setModified(Date modified) {
+        this.modified = modified;
+    }
+
     public Date getModified() {
         return modified;
     }
 
     public long getVersion() {
         return version;
+    }
+
+    public String getHtml() {
+        return html;
     }
 
     @Override

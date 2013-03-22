@@ -1,8 +1,9 @@
-package com.github.rmannibucau.blog.front;
+package com.github.rmannibucau.blog.front.controller;
 
 import com.github.rmannibucau.blog.dao.Repository;
 import com.github.rmannibucau.blog.dao.UserDao;
 import com.github.rmannibucau.blog.domain.User;
+import com.github.rmannibucau.blog.front.Navigation;
 
 import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
@@ -17,6 +18,7 @@ public class UserController implements Serializable {
     private static final String ANONYMOUS = "Guest";
 
     private String name = ANONYMOUS;
+    private String login;
     private String password;
     private boolean validated = false;
 
@@ -40,6 +42,10 @@ public class UserController implements Serializable {
         this.password = password;
     }
 
+    public String getLogin() {
+        return login;
+    }
+
     public Class<? extends Navigation> getLoginPage() {
         return Navigation.Login.class;
     }
@@ -52,6 +58,7 @@ public class UserController implements Serializable {
         }
 
         name = user.getDisplayName();
+        login = user.getLogin();
         validated = true;
         password = null; // don't keep it in memory
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Login successful", null));
@@ -62,10 +69,15 @@ public class UserController implements Serializable {
         validated = false;
         name = ANONYMOUS;
         password = null;
+        login = null;
         return Navigation.Index.class;
     }
 
     public boolean isLogged() {
         return validated;
+    }
+
+    public Class<? extends Navigation.PostsNavigation> getCreatePost() {
+        return Navigation.CreatePost.class;
     }
 }

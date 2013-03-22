@@ -1,4 +1,6 @@
-package com.github.rmannibucau.blog.front;
+package com.github.rmannibucau.blog.front.controller;
+
+import com.github.rmannibucau.blog.front.Navigation;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Named;
