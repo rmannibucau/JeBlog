@@ -18,16 +18,30 @@
         <h:inputTextarea rows="10" id="content" value="#{createPost.post.content}" required="true"/>
         <br />
 
-        <h:outputLabel for="category" value="Category:"/>
-        <h:selectOneListbox id="category" value="#{createPost.post.category}">
-          <f:selectItems value="#{createPost.availableCategories}" var="c" itemValue="#{c}" itemLabel="#{c.name}" />
+        <h:outputLabel for="status" value="Status:"/>
+        <h:selectOneListbox id="status" value="#{createPost.post.status}" size="1">
+          <f:selectItems value="#{createPost.availableStatus}" var="s" itemValue="#{s}" itemLabel="#{s}" />
         </h:selectOneListbox>
         <br />
 
-        <h:outputLabel for="status" value="Status:"/>
-        <h:selectOneListbox id="status" value="#{createPost.post.status}">
-          <f:selectItems value="#{createPost.availableStatus}" var="s" itemValue="#{s}" itemLabel="#{s}" />
+        <h:outputLabel for="format" value="Format:"/>
+        <h:selectOneListbox id="format" value="#{createPost.post.format}" size="1">
+          <f:selectItems value="#{createPost.availableFormats}" var="f" itemValue="#{f}" itemLabel="#{f}" />
         </h:selectOneListbox>
+        <br />
+
+        <h:outputLabel for="tag" value="Tags:"/>
+        <h:inputText id="tag" value="#{createPost.newTag}" />
+        <h:commandButton styleClass="btn" value="Add tag" actionListener="#{createPost.addTag(createPost.newTag)}">
+          <f:ajax execute="tag" render="tag tag-list" />
+        </h:commandButton>
+        <h:panelGroup layout="block" id="tag-list">
+          <ui:repeat value="#{createPost.post.tags}" var="it">
+            <h:commandButton styleClass="btn" value="#{it}" actionListener="#{createPost.post.removeTag(it)}">
+              <f:ajax render=":create-post:tag-list"  />
+            </h:commandButton>
+          </ui:repeat>
+        </h:panelGroup>
         <br />
 
         <h:commandButton styleClass="btn btn-large btn-primary" value="Blog!" action="#{createPost.save}"/>

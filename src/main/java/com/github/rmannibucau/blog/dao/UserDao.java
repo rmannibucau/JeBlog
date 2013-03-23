@@ -6,5 +6,5 @@ import org.springframework.data.repository.query.Param;
 
 public interface UserDao extends JpaRepository<User, Long> {
     User findByLoginAndPassword(@Param("login") String name, @Param("password") String password);
-    User findByLogin(@Param("login") String name);
+    User findByLogin(String login);
 }

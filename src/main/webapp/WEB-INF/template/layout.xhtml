@@ -33,8 +33,8 @@
                 <h:commandLink styleClass="menu-text" action="#{menu.getHomePage}" actionListener="#{user.logout}" rendered="#{user.logged}" value="Logout"/>
               </h:form>
             </li>
-            <li><h:link outcome="#{user.loginPage}" value="Login" rendered="#{!user.logged}" /></li>
-            <li><h:link outcome="#{user.createPost}" value="Create a post" rendered="#{user.logged}" /></li>
+            <li><h:link outcome="#{links.loginPage}" value="Login" rendered="#{!user.logged}" /></li>
+            <li><h:link outcome="#{links.createPost}" value="Create a post" rendered="#{user.logged}" /></li>
             <li><h:outputText styleClass="menu-text" value="Welcome #{user.name}." /></li>
           </ul>
         </div>

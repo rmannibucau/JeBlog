@@ -27,15 +27,15 @@ public class PostController {
         if (map.containsKey("id")) {
             final Post p = posts.findOne(Long.parseLong(map.get("id")));
             if (p != null) {
-                post = new PostDto(p.getId(), p.getTitle(), p.getHtml(),
+                post = new PostDto(p.getId(), p.getTitle(), p.getHtml(), p.getFormat(),
                                 p.getCreated(), p.getModified(),
                                 p.getAuthor().getDisplayName(),
-                                p.getCategoryAsString(), p.getStatus());
+                                p.getTagsAsString(), p.getStatus());
             }
         }
 
         if (post == null) { // not found
-            post = new PostDto(-1, "Not found", "No post id specified", null, null, null, null, null);
+            post = new PostDto(-1, "Not found", "No post id specified", null, null, null, null, null, null);
         }
     }
 

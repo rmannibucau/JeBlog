@@ -1,16 +1,20 @@
 package com.github.rmannibucau.blog.domain;
 
-import com.petebevin.markdown.MarkdownProcessor;
+import com.github.rmannibucau.blog.processor.ContentProcessor;
+import org.apache.deltaspike.core.api.provider.BeanProvider;
 
 import javax.enterprise.inject.Typed;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Lob;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
@@ -20,8 +24,11 @@ import javax.persistence.Version;
 import javax.xml.bind.annotation.XmlTransient;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
 @Entity
 @Typed
@@ -48,14 +55,17 @@ public class Post implements Serializable {
 
     private String title;
 
+    private String format;
+
     @Lob
     private String content;
 
     @Lob
     private String html;
 
-    @ManyToOne
-    private Category category;
+    @ManyToMany(fetch = FetchType.EAGER)
+    @OrderBy("name ASC")
+    private Set<Tag> tags;
 
     @ManyToOne
     private User author;
@@ -83,7 +93,7 @@ public class Post implements Serializable {
     @PreUpdate
     public void computeHtml() {
         if (content != null) {
-            final String newHtml = new MarkdownProcessor().markdown(content);
+            final String newHtml = BeanProvider.getContextualReference(ContentProcessor.class).toHtml(format, content);
             if (!newHtml.equals(html)) {
                 modified();
             }
@@ -116,19 +126,11 @@ public class Post implements Serializable {
         this.content = content;
     }
 
-    public Category getCategory() {
-        return category;
-    }
-
-    public String getCategoryAsString() {
-        if (category == null) {
-            return null;
+    public Set<Tag> getTags() {
+        if (tags == null) {
+            tags = new TreeSet<>();
         }
-        return category.getName();
-    }
-
-    public void setCategory(final Category category) {
-        this.category = category;
+        return tags;
     }
 
     public User getAuthor() {
@@ -184,6 +186,22 @@ public class Post implements Serializable {
 
     public String getHtml() {
         return html;
+    }
+
+    public String getFormat() {
+        return format;
+    }
+
+    public void setFormat(final String format) {
+        this.format = format;
+    }
+
+    public Collection<String> getTagsAsString() {
+        final Collection<String> list = new TreeSet<>();
+        for (final Tag t : tags) {
+            list.add(t.getName());
+        }
+        return list;
     }
 
     @Override

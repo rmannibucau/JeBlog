@@ -8,7 +8,7 @@
   <ui:composition>
       <div id="post">
         <h2>
-          <h:link outcome="#{pages.postPage}" value="#{post.title}">
+          <h:link outcome="#{links.postPage}" value="#{post.title}">
             <f:param name="id" value="#{post.id}" />
           </h:link>
         </h2>
@@ -17,6 +17,15 @@
           <h:outputText value="#{post.content}" escape="false" />
         </div>
 
+        <div class="tags">
+          <h:form>
+            <ui:repeat value="#{post.tags}" var="t">
+              <h:link styleClass="btn" value="#{t}" outcome="#{links.indexPage}">
+                <f:param name="tag" value="#{t}" />
+              </h:link>
+            </ui:repeat>
+          </h:form>
+        </div>
         <div class="article-footer">
           <h:outputText value="Created on #{post.created}" /> | <h:outputText value="Modified on #{post.modified}" /> | <h:outputText value="Author is #{post.author}" />
         </div>

@@ -1,13 +1,13 @@
 package com.github.rmannibucau.blog.front.service;
 
-import com.github.rmannibucau.blog.dao.CategoryDao;
+import com.github.rmannibucau.blog.dao.TagDao;
 import com.github.rmannibucau.blog.dao.PostDao;
 import com.github.rmannibucau.blog.dao.Repository;
 import com.github.rmannibucau.blog.dao.UserDao;
 import com.github.rmannibucau.blog.domain.Post;
+import com.github.rmannibucau.blog.domain.Tag;
 import com.github.rmannibucau.blog.front.controller.UserController;
 import com.github.rmannibucau.blog.front.dto.PostDto;
-import com.github.rmannibucau.blog.init.DBSetup;
 
 import javax.ejb.Lock;
 import javax.ejb.LockType;
@@ -27,7 +27,11 @@ public class PostService {
 
     @Inject
     @Repository
-    private CategoryDao categories;
+    private TagDao categories;
+
+    @Inject
+    @Repository
+    private TagDao tags;
 
     @Inject
     private UserController user;
@@ -38,10 +42,15 @@ public class PostService {
         toSave.setContent(post.getContent());
         toSave.setStatus(post.getStatus());
         toSave.setAuthor(users.findByLogin(user.getLogin()));
-        if (post.getCategory() != null) {
-            toSave.setCategory(categories.findByName(post.getCategory()));
-        } else {
-            toSave.setCategory(categories.findByName(DBSetup.DEFAULT_CATEGORY));
+
+        for (final String name : post.getTags()) {
+            Tag tag = tags.findByName(name);
+            if (tag == null) {
+                tag = new Tag();
+                tag.setName(name);
+            }
+            tags.save(tag);
+            toSave.getTags().add(tag);
         }
 
         posts.saveAndFlush(toSave);

@@ -1,8 +1,7 @@
 package com.github.rmannibucau.blog.init;
 
-import com.github.rmannibucau.blog.dao.CategoryDao;
+import com.github.rmannibucau.blog.dao.TagDao;
 import com.github.rmannibucau.blog.dao.UserDao;
-import com.github.rmannibucau.blog.domain.Category;
 import com.github.rmannibucau.blog.domain.User;
 
 import javax.annotation.PostConstruct;
@@ -25,7 +24,7 @@ public class DBSetup {
     private UserDao users;
 
     @Inject
-    private CategoryDao categories;
+    private TagDao categories;
 
     @Resource
     private SessionContext sc;
@@ -43,9 +42,6 @@ public class DBSetup {
             addDefaultUser();
 
         }
-        if (categories.count() == 0) {
-            addDefaultCategory();
-        }
         return new AsyncResult<>(true);
     }
 
@@ -56,13 +52,6 @@ public class DBSetup {
         } catch (final Exception e) {
             //no-op
         }
-    }
-
-    private void addDefaultCategory() {
-        final Category category = new Category();
-        category.setName(DEFAULT_CATEGORY);
-        category.setDescription("The default category");
-        categories.saveAndFlush(category);
     }
 
     private void addDefaultUser() {

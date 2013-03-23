@@ -1,4 +1,4 @@
-package com.github.rmannibucau.blog.front;
+package com.github.rmannibucau.blog.front.controller;
 
 import com.github.rmannibucau.blog.front.security.LoggedInUserVoter;
 import org.apache.deltaspike.core.api.config.view.ViewConfig;

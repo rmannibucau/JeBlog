@@ -3,7 +3,6 @@ package com.github.rmannibucau.blog.front.controller;
 import com.github.rmannibucau.blog.dao.Repository;
 import com.github.rmannibucau.blog.dao.UserDao;
 import com.github.rmannibucau.blog.domain.User;
-import com.github.rmannibucau.blog.front.Navigation;
 
 import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
@@ -46,10 +45,6 @@ public class UserController implements Serializable {
         return login;
     }
 
-    public Class<? extends Navigation> getLoginPage() {
-        return Navigation.Login.class;
-    }
-
     public Class<? extends Navigation> login() {
         final User user = users.findByLoginAndPassword(name, password);
         if (user == null) {
@@ -75,9 +70,5 @@ public class UserController implements Serializable {
 
     public boolean isLogged() {
         return validated;
-    }
-
-    public Class<? extends Navigation.PostsNavigation> getCreatePost() {
-        return Navigation.CreatePost.class;
     }
 }
