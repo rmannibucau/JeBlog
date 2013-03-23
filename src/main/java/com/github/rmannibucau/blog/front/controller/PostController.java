@@ -26,11 +26,15 @@ public class PostController {
         final Map<String, String> map = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
         if (map.containsKey("id")) {
             final Post p = posts.findOne(Long.parseLong(map.get("id")));
-            post = new PostDto(p.getId(), p.getTitle(), p.getHtml(),
+            if (p != null) {
+                post = new PostDto(p.getId(), p.getTitle(), p.getHtml(),
                                 p.getCreated(), p.getModified(),
                                 p.getAuthor().getDisplayName(),
                                 p.getCategoryAsString(), p.getStatus());
-        } else {
+            }
+        }
+
+        if (post == null) { // not found
             post = new PostDto(-1, "Not found", "No post id specified", null, null, null, null, null);
         }
     }

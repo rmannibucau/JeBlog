@@ -98,8 +98,4 @@ public class IndexController implements Serializable {
         }
         return posts;
     }
-
-    public Class<? extends Navigation.PostsNavigation> getPostPage() {
-        return Navigation.Post.class;
-    }
 }

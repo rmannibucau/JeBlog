@@ -1,0 +1,26 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+<h:body>
+  <ui:composition>
+      <div id="post">
+        <h2>
+          <h:link outcome="#{pages.postPage}" value="#{post.title}">
+            <f:param name="id" value="#{post.id}" />
+          </h:link>
+        </h2>
+
+        <div class="article">
+          <h:outputText value="#{post.content}" escape="false" />
+        </div>
+
+        <div class="article-footer">
+          <h:outputText value="Created on #{post.created}" /> | <h:outputText value="Modified on #{post.modified}" /> | <h:outputText value="Author is #{post.author}" />
+        </div>
+      </div>
+  </ui:composition>
+</h:body>
+</html>

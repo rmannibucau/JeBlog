@@ -1,12 +1,9 @@
 package com.github.rmannibucau.blog.init;
 
 import com.github.rmannibucau.blog.dao.CategoryDao;
-import com.github.rmannibucau.blog.dao.PostDao;
 import com.github.rmannibucau.blog.dao.UserDao;
 import com.github.rmannibucau.blog.domain.Category;
-import com.github.rmannibucau.blog.domain.Post;
 import com.github.rmannibucau.blog.domain.User;
-import org.apache.commons.lang3.RandomStringUtils;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
@@ -17,7 +14,6 @@ import javax.ejb.SessionContext;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
 import javax.inject.Inject;
-import java.util.Random;
 import java.util.concurrent.Future;
 
 @Singleton
@@ -44,8 +40,7 @@ public class DBSetup {
     @Asynchronous
     public Future<Boolean> doInit() {
         if (users.count() == 0) {
-            final User user = addDefaultUser();
-            addSomeData(user);
+            addDefaultUser();
 
         }
         if (categories.count() == 0) {
@@ -70,29 +65,11 @@ public class DBSetup {
         categories.saveAndFlush(category);
     }
 
-    private User addDefaultUser() {
+    private void addDefaultUser() {
         final User user = new User();
         user.setLogin("jeblog");
         user.setDisplayName("Admin");
         user.setPassword("p@ssword");
         users.saveAndFlush(user);
-        return user;
-    }
-
-    @Inject
-    private PostDao posts;
-    private void addSomeData(final User u) {
-        // to clean up once done
-        final Random random = new Random();
-        for (int i = 0; i < 100; i++) {
-            final Post post = new Post();
-            post.setAuthor(u);
-            for (int j = 0; j < 100; j++) {
-                post.setContent(post.getContent() + " " + RandomStringUtils.randomAlphanumeric(random.nextInt(50)));
-            }
-            post.setStatus(Post.Status.PUBLISHED);
-            post.setTitle("Title #" + i);
-            posts.save(post);
-        }
     }
 }

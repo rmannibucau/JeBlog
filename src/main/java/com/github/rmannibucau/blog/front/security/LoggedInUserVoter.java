@@ -7,6 +7,7 @@ import org.apache.deltaspike.security.api.authorization.SecurityViolation;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
+import java.util.Collections;
 import java.util.Set;
 
 @ApplicationScoped
@@ -17,13 +18,14 @@ public class LoggedInUserVoter implements AccessDecisionVoter {
     @Override
     public Set<SecurityViolation> checkPermission(final AccessDecisionVoterContext accessDecisionVoterContext) {
         if (!user.isLogged()) {
-            accessDecisionVoterContext.getViolations().add(new SecurityViolation() {
+            final SecurityViolation violation = new SecurityViolation() {
                 @Override
                 public String getReason() {
                     return "Log in before doing it.";
                 }
-            });
+            };
+            return Collections.singleton(violation);
         }
-        return null;
+        return Collections.emptySet();
     }
 }

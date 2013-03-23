@@ -2,9 +2,9 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:jeblog="http://rmannibucau.github.com/jeblog"
       xmlns:ui="http://java.sun.com/jsf/facelets">
-<ui:composition template="/WEB-INF/layout.xhtml">
+<ui:composition template="/WEB-INF/template/layout.xhtml">
   <ui:define name="content">
     <div>
       <h1>Foo stuff!</h1>
@@ -14,23 +14,7 @@
 
     <div id="posts">
       <ui:repeat value="#{index.posts}" var="it">
-
-        <div class="post">
-          <h2>
-            <h:link outcome="#{index.postPage}" value="#{it.title}">
-              <f:param name="id" value="#{it.id}" />
-            </h:link>
-          </h2>
-
-          <div class="article">
-            <h:outputText value="#{it.content}" escape="false" />
-          </div>
-
-          <div class="article-footer">
-            <h:outputText value="Created on #{it.created}" /> | <h:outputText value="Modified on #{it.modified}" /> | <h:outputText value="Author is #{it.author}" />
-          </div>
-        </div>
-
+        <jeblog:post post="#{it}" />
       </ui:repeat>
 
       <h:form id="post-navigation">

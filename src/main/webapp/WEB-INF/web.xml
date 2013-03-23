@@ -10,6 +10,11 @@
   <module-name>je-blog</module-name>
 
   <context-param>
+    <param-name>javax.faces.FACELETS_LIBRARIES</param-name>
+    <param-value>/WEB-INF/jeblog.taglib.xml</param-value>
+  </context-param>
+
+  <context-param>
     <param-name>javax.faces.PROJECT_STAGE</param-name>
     <param-value>Development</param-value>
   </context-param>

@@ -1,23 +1,11 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:ui="http://java.sun.com/jsf/facelets">
-<ui:composition template="/WEB-INF/layout.xhtml">
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:jeblog="http://rmannibucau.github.com/jeblog">
+<ui:composition template="/WEB-INF/template/layout.xhtml">
   <ui:define name="content">
-    <div id="post">
-      <h2>
-        <h:outputText value="#{post.current.title}" />
-      </h2>
-
-      <div class="article">
-        <h:outputText value="#{post.current.content}" escape="false" />
-      </div>
-
-      <div class="article-footer">
-        <h:outputText value="Created on #{post.current.created}" /> | <h:outputText value="Modified on #{post.current.modified}" /> | <h:outputText value="Author is #{post.current.author}" />
-      </div>
-    </div>
+    <jeblog:post post="#{post.current}" />
   </ui:define>
 </ui:composition>
 </html>
