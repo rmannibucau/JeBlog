@@ -19,6 +19,10 @@ public class LinkHelper {
         return Navigation.Post.class;
     }
 
+    public Class<? extends Navigation.PostsNavigation> getEditPage() {
+        return Navigation.EditPost.class;
+    }
+
     public Class<? extends Navigation.PostsNavigation> getCreatePost() {
         return Navigation.CreatePost.class;
     }

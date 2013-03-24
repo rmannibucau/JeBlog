@@ -13,6 +13,10 @@
           </h:link>
         </h2>
 
+        <h:link outcome="#{links.editPage}" value="Edit" rendered="#{user.logged}">
+          <f:param name="id" value="#{post.id}" />
+        </h:link>
+
         <div class="article">
           <h:outputText value="#{post.content}" escape="false" />
         </div>
