@@ -9,4 +9,8 @@
     <tag-name>post</tag-name>
     <source>template/post.xhtml</source>
   </tag>
+  <tag>
+    <tag-name>post-edit</tag-name>
+    <source>template/post-form.xhtml</source>
+  </tag>
 </facelet-taglib>

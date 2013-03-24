@@ -37,7 +37,16 @@ public class PostService {
     private UserController user;
 
     public void save(final PostDto post) {
-        final Post toSave = new Post();
+        final Post toSave;
+        if (post.getId() == null) {
+            toSave = new Post();
+        } else {
+            toSave = posts.findOne(post.getId());
+            if (toSave == null) {
+                throw new IllegalArgumentException("Post " + post.getId() + " not found");
+            }
+        }
+
         toSave.setTitle(post.getTitle());
         toSave.setContent(post.getContent());
         toSave.setStatus(post.getStatus());

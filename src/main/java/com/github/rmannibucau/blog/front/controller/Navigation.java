@@ -16,10 +16,15 @@ public interface Navigation extends ViewConfig {
     @View(basePath = "/post/")
     interface PostsNavigation extends Navigation {}
 
-    @View(name = "create-post")
-    @Secured(LoggedInUserVoter.class)
-    class CreatePost implements PostsNavigation {}
-
     @View
     class Post implements PostsNavigation {}
+
+    @Secured(LoggedInUserVoter.class)
+    interface SecuredPostsNavigation extends PostsNavigation {}
+
+    @View(name = "create-post")
+    class CreatePost implements SecuredPostsNavigation {}
+
+    @View(name = "edit-post")
+    class EditPost implements SecuredPostsNavigation {}
 }

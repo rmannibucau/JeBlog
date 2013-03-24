@@ -104,7 +104,7 @@ public class IndexController implements Serializable {
             if (tagValue == null) {
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Can't find tag " + tag, null));
                 queryResult = posts.findByStatus(Post.Status.PUBLISHED, pageable);
-            } else {
+            } else { // TODO: get rid of em usage here - maybe wait cdi-query import into DS
                 queryResult = new PageImpl<>(
                         em.createQuery("select p from Post p where :tag member of p.tags and p.status = :status", Post.class)
                             .setParameter("status", Post.Status.PUBLISHED)
@@ -120,9 +120,9 @@ public class IndexController implements Serializable {
         page = new PageImpl<>(previewContent(queryResult), pageable, queryResult.getTotalElements());
     }
 
-    private List<PostDto> previewContent(final Page<Post> byStatus) {
+    private List<PostDto> previewContent(final Page<Post> input) {
         final List<PostDto> posts = new ArrayList<>();
-        for (final Post p : byStatus) {
+        for (final Post p : input) {
             posts.add(new PostDto(p.getId(), p.getTitle(),
                     processor.toHtml(p.getFormat(), StringUtils.abbreviate(p.getContent(), previewSize)), p.getFormat(),
                     p.getCreated(), p.getModified(), p.getAuthor().getDisplayName(),
