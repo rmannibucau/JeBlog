@@ -8,6 +8,7 @@
 
 <f:metadata>
   <f:viewParam name="tag" value="#{index.tag}" />
+  <f:event type="preRenderView" listener="#{index.init}" />
 </f:metadata>
 
 <ui:composition template="/WEB-INF/template/layout.xhtml">
