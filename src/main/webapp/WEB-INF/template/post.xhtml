@@ -13,9 +13,18 @@
           </h:link>
         </h2>
 
-        <h:link outcome="#{links.editPage}" value="Edit" rendered="#{user.logged}">
-          <f:param name="id" value="#{post.id}" />
-        </h:link>
+        <h:form>
+          <ul class="nav nav-pills">
+            <li>
+              <h:link outcome="#{links.editPostPage}" value="Edit" rendered="#{user.logged}">
+                <f:param name="id" value="#{post.id}" />
+              </h:link>
+            </li>
+            <li>
+              <h:commandLink actionListener="#{removePost.remove(post.id)}" value="Remove" rendered="#{user.logged}" />
+            </li>
+          </ul>
+        </h:form>
 
         <div class="article">
           <h:outputText value="#{post.content}" escape="false" />

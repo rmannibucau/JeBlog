@@ -64,4 +64,8 @@ public class PostService {
 
         posts.saveAndFlush(toSave);
     }
+
+    public void delete(final long id) {
+        posts.delete(id);
+    }
 }
