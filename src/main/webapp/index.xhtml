@@ -24,24 +24,32 @@
         <jeblog:post post="#{it}" />
       </ui:repeat>
 
-      <h:form id="post-navigation">
-        <div class="btn-toolbar">
-          <div class="btn-group">
-            <h:commandLink styleClass="btn" actionListener="#{index.beginning}" update="posts">
-              <i class="icon-step-backward" />
+      <h:form id="post-navigation" styleClass="pagination pagination-centered">
+        <ul>
+          <li>
+            <h:commandLink actionListener="#{index.beginning}" update="posts">
+              <h:outputText value="&#171;" />
             </h:commandLink>
-            <h:commandLink styleClass="btn" actionListener="#{index.previousPage}" rendered="#{index.hasPrevious}" update="posts">
-              <i class="icon-backward" />
+          </li>
+          <li>
+            <h:commandLink  actionListener="#{index.previousPage}" rendered="#{index.hasPrevious}" update="posts">
+              <h:outputText value="&#8249;" />
             </h:commandLink>
-            <h:outputText styleClass="btn" value="#{index.current}" />
-            <h:commandLink styleClass="btn" actionListener="#{index.nextPage}" rendered="#{index.hasNext}" update="posts">
-              <i class="icon-forward" />
+          </li>
+          <li class="active">
+            <a href="#"><h:outputText value="#{index.current}" /></a>
+          </li>
+          <li>
+            <h:commandLink actionListener="#{index.nextPage}" rendered="#{index.hasNext}" update="posts">
+              <h:outputText value="&#8250;" />
             </h:commandLink>
-            <h:commandLink styleClass="btn" actionListener="#{index.end}" update="posts">
-              <i class="icon-step-forward" />
+          </li>
+          <li>
+            <h:commandLink actionListener="#{index.end}" update="posts">
+              <h:outputText value="&#187;" />
             </h:commandLink>
-          </div>
-        </div>
+          </li>
+        </ul>
       </h:form>
     </div>
   </ui:define>

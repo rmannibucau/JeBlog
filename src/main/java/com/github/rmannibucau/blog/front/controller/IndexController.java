@@ -56,7 +56,7 @@ public class IndexController implements Serializable {
 
     // @PostConstruct // need viewParam so don't use cdi here
     public void init() {
-        setPage(0); // force page to be != null
+        setPage(pageIndex); // force page to be != null
     }
 
     public List<PostDto> getPosts() {

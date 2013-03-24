@@ -31,20 +31,22 @@
         <br />
 
         <h:outputLabel for="tag" value="Tags:"/>
-        <h:inputText id="tag" value="#{createPost.newTag}" />
-        <h:commandButton styleClass="btn" value="Add tag" actionListener="#{createPost.addTag(createPost.newTag)}">
-          <f:ajax execute="tag" render="tag tag-list" />
-        </h:commandButton>
+        <div class="input-append">
+          <h:inputText id="tag" value="#{createPost.newTag}" styleClass="span11" />
+          <h:commandButton styleClass="btn" value="Add tag" actionListener="#{createPost.addTag(createPost.newTag)}">
+            <f:ajax execute="tag" render="tag tag-list" />
+          </h:commandButton>
+        </div>
         <h:panelGroup layout="block" id="tag-list">
           <ui:repeat value="#{createPost.post.tags}" var="it">
-            <h:commandButton styleClass="btn" value="#{it}" actionListener="#{createPost.post.removeTag(it)}">
+            <h:commandButton styleClass="btn btn-mini" value="#{it}" actionListener="#{createPost.post.removeTag(it)}">
               <f:ajax render=":create-post:tag-list"  />
             </h:commandButton>
           </ui:repeat>
         </h:panelGroup>
         <br />
 
-        <h:commandButton styleClass="btn btn-large btn-primary" value="Blog!" action="#{createPost.save}"/>
+        <h:commandButton styleClass="btn btn-large btn-primary" style="width: 100%;" value="Blog it!" action="#{createPost.save}"/>
       </h:form>
     </div>
 

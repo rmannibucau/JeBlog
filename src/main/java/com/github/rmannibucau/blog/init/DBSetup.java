@@ -1,7 +1,9 @@
 package com.github.rmannibucau.blog.init;
 
+import com.github.rmannibucau.blog.dao.PostDao;
 import com.github.rmannibucau.blog.dao.TagDao;
 import com.github.rmannibucau.blog.dao.UserDao;
+import com.github.rmannibucau.blog.domain.Post;
 import com.github.rmannibucau.blog.domain.User;
 
 import javax.annotation.PostConstruct;
@@ -26,6 +28,9 @@ public class DBSetup {
     @Inject
     private TagDao categories;
 
+    @Inject
+    private PostDao posts;
+
     @Resource
     private SessionContext sc;
 
@@ -41,6 +46,14 @@ public class DBSetup {
         if (users.count() == 0) {
             addDefaultUser();
 
+            for (int i = 0; i < 30; i++) {
+                Post p = new Post();
+                p.setTitle("#" + i);
+                p.setContent("#" + i);
+                p.setAuthor(users.findAll().iterator().next());
+                p.setStatus(Post.Status.PUBLISHED);
+                posts.save(p);
+            }
         }
         return new AsyncResult<>(true);
     }

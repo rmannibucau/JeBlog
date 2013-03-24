@@ -92,7 +92,16 @@ public class PostDto implements Serializable {
     }
 
     public void addTag(final String name) {
-        tags.add(name);
+        if (name == null) {
+            return;
+        }
+
+        final String trimmed = name.trim();
+        if (trimmed.isEmpty()) {
+            return;
+        }
+
+        tags.add(trimmed);
     }
 
     public void removeTag(final String name) {
