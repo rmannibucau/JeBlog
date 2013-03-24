@@ -1,31 +1,26 @@
 package com.github.rmannibucau.blog.front.controller;
 
-import com.github.rmannibucau.blog.dao.PostDao;
-import com.github.rmannibucau.blog.dao.Repository;
+import com.github.rmannibucau.blog.dao.PostRepository;
 import com.github.rmannibucau.blog.domain.Post;
 import com.github.rmannibucau.blog.front.dto.PostDto;
 
-import javax.annotation.PostConstruct;
 import javax.enterprise.context.RequestScoped;
-import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
-import java.util.Map;
 
 @Named("post")
 @RequestScoped
 public class PostController {
     @Inject
-    @Repository
-    private PostDao posts;
+    private PostRepository posts;
 
     private PostDto post;
 
-    @PostConstruct
-    public void findPost() {
-        final Map<String, String> map = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
-        if (map.containsKey("id")) {
-            final Post p = posts.findOne(Long.parseLong(map.get("id")));
+    private long id;
+
+    public void init() {
+        if (id >= 0) {
+            final Post p = posts.findById(id);
             if (p != null) {
                 post = new PostDto(p.getId(), p.getTitle(), p.getHtml(), p.getFormat(),
                                 p.getCreated(), p.getModified(),
@@ -41,5 +36,13 @@ public class PostController {
 
     public PostDto getCurrent() {
         return post;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(final long id) {
+        this.id = id;
     }
 }

@@ -5,6 +5,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
@@ -21,12 +22,13 @@ import java.util.Date;
 @Entity
 @Typed
 @Table(name = "jeblog_user")
-@NamedQuery(
-        name = User.FIND_BY_NAME_AND_PASSWORD,
-        query = "select u from User u where u.login = :login and  u.password = :password")
+@NamedQueries({
+        @NamedQuery(name = "User.findByLogin", query = "select u from User u where u.login = :login"),
+        @NamedQuery(name = "User.findByLoginAndPassword", query = "select u from User u where u.login = :login and  u.password = :password"),
+        @NamedQuery(name = "User.count", query = "select count(u) from User u"),
+        @NamedQuery(name = "User.findAll", query = "select u from User u")
+})
 public class User implements Serializable {
-    public static final String FIND_BY_NAME_AND_PASSWORD = "User.findByLoginAndPassword";
-
     @Id
     @GeneratedValue
     protected Long id;

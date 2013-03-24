@@ -1,20 +1,16 @@
 package com.github.rmannibucau.blog.front.controller;
 
-import com.github.rmannibucau.blog.dao.PostDao;
-import com.github.rmannibucau.blog.dao.Repository;
-import com.github.rmannibucau.blog.dao.TagDao;
+import com.github.rmannibucau.blog.dao.PostRepository;
+import com.github.rmannibucau.blog.dao.TagRepository;
+import com.github.rmannibucau.blog.dao.api.Page;
+import com.github.rmannibucau.blog.dao.api.PageRequest;
 import com.github.rmannibucau.blog.domain.Post;
 import com.github.rmannibucau.blog.domain.Tag;
 import com.github.rmannibucau.blog.front.dto.PostDto;
 import com.github.rmannibucau.blog.processor.ContentProcessor;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.deltaspike.core.api.config.annotation.ConfigProperty;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 
-import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
@@ -29,12 +25,10 @@ import java.util.List;
 @ViewScoped
 public class IndexController implements Serializable {
     @Inject
-    @Repository
-    private PostDao posts;
+    private PostRepository posts;
 
     @Inject
-    @Repository
-    private TagDao tags;
+    private TagRepository tags;
 
     @Inject
     @ConfigProperty(name = "jeblog.page-size", defaultValue = "15")
@@ -46,9 +40,6 @@ public class IndexController implements Serializable {
 
     @Inject
     private ContentProcessor processor;
-
-    @Inject
-    private EntityManager em;
 
     private int pageIndex = 0;
     private Page<PostDto> page;
@@ -94,7 +85,7 @@ public class IndexController implements Serializable {
     private void setPage(final int idx) {
         pageIndex = idx;
 
-        final PageRequest pageable = new PageRequest(idx, pageSize, new Sort(Sort.Direction.DESC, "created"));
+        final PageRequest pageable = new PageRequest(idx, pageSize);
 
         final Page<Post> queryResult;
         if (tag == null) {
@@ -104,20 +95,13 @@ public class IndexController implements Serializable {
             if (tagValue == null) {
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Can't find tag " + tag, null));
                 queryResult = posts.findByStatus(Post.Status.PUBLISHED, pageable);
-            } else { // TODO: get rid of em usage here - maybe wait cdi-query import into DS
-                queryResult = new PageImpl<>(
-                        em.createQuery("select p from Post p where :tag member of p.tags and p.status = :status", Post.class)
-                            .setParameter("status", Post.Status.PUBLISHED)
-                            .setParameter("tag", tagValue).getResultList(),
-                        pageable,
-                        em.createQuery("select count(p) from Post p where :tag member of p.tags and p.status = :status", Long.class)
-                            .setParameter("status", Post.Status.PUBLISHED)
-                            .setParameter("tag", tagValue).getSingleResult());
+            } else {
+                queryResult = posts.findByStatusAndTag(Post.Status.PUBLISHED, tagValue, pageable);
             }
         }
 
 
-        page = new PageImpl<>(previewContent(queryResult), pageable, queryResult.getTotalElements());
+        page = new Page<>(previewContent(queryResult), pageable, queryResult.getTotalElements());
     }
 
     private List<PostDto> previewContent(final Page<Post> input) {

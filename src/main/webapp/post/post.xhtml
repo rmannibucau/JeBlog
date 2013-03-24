@@ -1,8 +1,14 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:jeblog="http://rmannibucau.github.com/jeblog">
+<f:metadata>
+    <f:viewParam name="id" value="#{post.id}" />
+    <f:event type="preRenderView" listener="#{post.init}" />
+</f:metadata>
+
 <ui:composition template="/WEB-INF/template/layout.xhtml">
   <ui:define name="content">
     <jeblog:post post="#{post.current}" />

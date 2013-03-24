@@ -4,9 +4,7 @@ import com.github.rmannibucau.blog.domain.Post;
 import com.github.rmannibucau.blog.front.dto.PostDto;
 
 import javax.annotation.PostConstruct;
-import javax.faces.application.FacesMessage;
 import javax.faces.bean.ViewScoped;
-import javax.faces.context.FacesContext;
 import javax.inject.Named;
 
 @Named("createPost")

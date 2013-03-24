@@ -13,6 +13,8 @@ import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
 import javax.persistence.PrePersist;
@@ -33,47 +35,46 @@ import java.util.TreeSet;
 @Entity
 @Typed
 @Table(name = "jeblog_post")
+@NamedQueries({
+        @NamedQuery(
+                name = "Post.findByStatus",
+                query = "select p from Post p where p.status = :status order by p.created DESC"),
+        @NamedQuery(
+                name = "Post.countByStatus",
+                query = "select count(p) from Post p where p.status = :status"),
+        @NamedQuery(
+                name = "Post.findByStatusAndTag",
+                query = "select p from Post p where :tag member of p.tags and p.status = :status order by p.created DESC"),
+        @NamedQuery(
+                name = "Post.countByStatusAndTag",
+                query = "select count(p) from Post p where :tag member of p.tags and p.status = :status")
+})
 public class Post implements Serializable {
-    public enum Status {
-        DRAFT, PUBLISHED
-    }
-
     @Id
     @GeneratedValue
     protected Long id;
-
     @Temporal(TemporalType.TIMESTAMP)
     protected Date created;
-
     @XmlTransient
     @Temporal(TemporalType.TIMESTAMP)
     protected Date modified;
-
     @XmlTransient
     @Version
     protected long version;
-
     private String title;
-
     private String format;
-
     @Lob
     private String content;
-
     @Lob
     private String html;
-
     @ManyToMany(fetch = FetchType.EAGER)
     @OrderBy("name ASC")
     private Set<Tag> tags;
-
     @ManyToOne
     private User author;
-
     @XmlTransient
     @Enumerated(EnumType.STRING)
     private Status status;
-
     @XmlTransient
     @OneToMany
     private List<Comment> comments;
@@ -172,12 +173,12 @@ public class Post implements Serializable {
         this.created = created;
     }
 
-    public void setModified(Date modified) {
-        this.modified = modified;
-    }
-
     public Date getModified() {
         return modified;
+    }
+
+    public void setModified(Date modified) {
+        this.modified = modified;
     }
 
     public long getVersion() {
@@ -228,5 +229,9 @@ public class Post implements Serializable {
             return super.hashCode();
         }
         return (int) (id ^ (id >>> 32));
+    }
+
+    public enum Status {
+        DRAFT, PUBLISHED
     }
 }

@@ -1,7 +1,6 @@
 package com.github.rmannibucau.blog.front.controller;
 
-import com.github.rmannibucau.blog.dao.Repository;
-import com.github.rmannibucau.blog.dao.UserDao;
+import com.github.rmannibucau.blog.dao.UserRepository;
 import com.github.rmannibucau.blog.domain.User;
 
 import javax.enterprise.context.SessionScoped;
@@ -22,8 +21,7 @@ public class UserController implements Serializable {
     private boolean validated = false;
 
     @Inject
-    @Repository
-    private UserDao users;
+    private UserRepository users;
 
     public String getName() {
         return name;

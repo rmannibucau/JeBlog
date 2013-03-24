@@ -1,7 +1,6 @@
 package com.github.rmannibucau.blog.front.converter;
 
-import com.github.rmannibucau.blog.dao.TagDao;
-import com.github.rmannibucau.blog.dao.Repository;
+import com.github.rmannibucau.blog.dao.TagRepository;
 import com.github.rmannibucau.blog.domain.Tag;
 import org.apache.commons.lang3.StringUtils;
 
@@ -17,8 +16,7 @@ import javax.inject.Named;
 @FacesConverter(forClass = Tag.class)
 public class CategoryConverter implements Converter {
     @Inject
-    @Repository
-    private TagDao categories;
+    private TagRepository categories;
 
     @Override
     public String getAsString(final FacesContext facesContext, final UIComponent uiComponent, final Object value)

@@ -1,7 +1,7 @@
-package com.github.rmannibucau.blog.dao;
+package com.github.rmannibucau.blog.dao.api;
 
-import javax.inject.Qualifier;
-import java.lang.annotation.Documented;
+import org.apache.deltaspike.core.api.invocationhandler.annotation.InvocationHandlerBinding;
+
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
@@ -11,9 +11,8 @@ import static java.lang.annotation.ElementType.PARAMETER;
 import static java.lang.annotation.ElementType.TYPE;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
+@InvocationHandlerBinding
 @Target( { TYPE, METHOD, PARAMETER, FIELD })
 @Retention(RUNTIME)
-@Documented
-@Qualifier
 public @interface Repository {
 }

@@ -1,7 +1,6 @@
 package com.github.rmannibucau.blog.front.controller;
 
-import com.github.rmannibucau.blog.dao.PostDao;
-import com.github.rmannibucau.blog.dao.Repository;
+import com.github.rmannibucau.blog.dao.PostRepository;
 import com.github.rmannibucau.blog.domain.Post;
 import com.github.rmannibucau.blog.front.dto.PostDto;
 
@@ -13,14 +12,13 @@ import javax.inject.Named;
 @ViewScoped
 public class EditPostController extends PostEditContoller {
     @Inject
-    @Repository
-    private PostDao posts;
+    private PostRepository posts;
 
     private long id;
 
     public void init() {
         if (post == null || post.getId() != id) {
-            final Post record = posts.findOne(id);
+            final Post record = posts.findById(id);
             post = new PostDto(record.getId(), record.getTitle(), record.getContent(),
                     record.getFormat(), record.getCreated(), record.getModified(),
                     record.getAuthor().getLogin(), record.getTagsAsString(), record.getStatus());

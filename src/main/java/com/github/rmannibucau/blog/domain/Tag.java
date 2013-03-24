@@ -6,6 +6,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OrderBy;
 import javax.persistence.Table;
 import javax.persistence.Version;
@@ -17,6 +19,9 @@ import java.util.Set;
 @Entity
 @Typed
 @Table(name = "jeblog_tag")
+@NamedQueries({
+    @NamedQuery(name = "Tag.findByName", query = "select t from Tag t where t.name = :name")
+})
 public class Tag implements Serializable, Comparable<Tag> {
     @Id
     @GeneratedValue

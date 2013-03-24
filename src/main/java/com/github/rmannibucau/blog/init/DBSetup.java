@@ -1,8 +1,8 @@
 package com.github.rmannibucau.blog.init;
 
-import com.github.rmannibucau.blog.dao.PostDao;
-import com.github.rmannibucau.blog.dao.TagDao;
-import com.github.rmannibucau.blog.dao.UserDao;
+import com.github.rmannibucau.blog.dao.PostRepository;
+import com.github.rmannibucau.blog.dao.TagRepository;
+import com.github.rmannibucau.blog.dao.UserRepository;
 import com.github.rmannibucau.blog.domain.Post;
 import com.github.rmannibucau.blog.domain.User;
 
@@ -23,13 +23,13 @@ public class DBSetup {
     public static final String DEFAULT_CATEGORY = "Default";
 
     @Inject
-    private UserDao users;
+    private UserRepository users;
 
     @Inject
-    private TagDao categories;
+    private TagRepository categories;
 
     @Inject
-    private PostDao posts;
+    private PostRepository posts;
 
     @Resource
     private SessionContext sc;

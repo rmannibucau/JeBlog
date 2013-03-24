@@ -1,8 +1,7 @@
 package com.github.rmannibucau.blog.front.controller;
 
-import com.github.rmannibucau.blog.dao.Repository;
-import com.github.rmannibucau.blog.dao.TagDao;
-import com.github.rmannibucau.blog.dao.UserDao;
+import com.github.rmannibucau.blog.dao.TagRepository;
+import com.github.rmannibucau.blog.dao.UserRepository;
 import com.github.rmannibucau.blog.domain.Post;
 import com.github.rmannibucau.blog.front.dto.PostDto;
 import com.github.rmannibucau.blog.front.service.PostService;
@@ -15,12 +14,10 @@ import java.io.Serializable;
 
 public abstract class PostEditContoller implements Serializable {
     @Inject
-    @Repository
-    protected UserDao users;
+    protected UserRepository users;
 
     @Inject
-    @Repository
-    protected TagDao categories;
+    protected TagRepository categories;
 
     @Inject
     protected PostService postService;

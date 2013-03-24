@@ -1,9 +1,8 @@
 package com.github.rmannibucau.blog.front.service;
 
-import com.github.rmannibucau.blog.dao.TagDao;
-import com.github.rmannibucau.blog.dao.PostDao;
-import com.github.rmannibucau.blog.dao.Repository;
-import com.github.rmannibucau.blog.dao.UserDao;
+import com.github.rmannibucau.blog.dao.PostRepository;
+import com.github.rmannibucau.blog.dao.TagRepository;
+import com.github.rmannibucau.blog.dao.UserRepository;
 import com.github.rmannibucau.blog.domain.Post;
 import com.github.rmannibucau.blog.domain.Tag;
 import com.github.rmannibucau.blog.front.controller.UserController;
@@ -18,20 +17,16 @@ import javax.inject.Inject;
 @Lock(LockType.READ)
 public class PostService {
     @Inject
-    @Repository
-    private PostDao posts;
+    private PostRepository posts;
 
     @Inject
-    @Repository
-    private UserDao users;
+    private UserRepository users;
 
     @Inject
-    @Repository
-    private TagDao categories;
+    private TagRepository categories;
 
     @Inject
-    @Repository
-    private TagDao tags;
+    private TagRepository tags;
 
     @Inject
     private UserController user;
@@ -41,7 +36,7 @@ public class PostService {
         if (post.getId() == null) {
             toSave = new Post();
         } else {
-            toSave = posts.findOne(post.getId());
+            toSave = posts.findById(post.getId());
             if (toSave == null) {
                 throw new IllegalArgumentException("Post " + post.getId() + " not found");
             }
@@ -66,6 +61,6 @@ public class PostService {
     }
 
     public void delete(final long id) {
-        posts.delete(id);
+        posts.deleteById(id);
     }
 }
