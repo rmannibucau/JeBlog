@@ -1,9 +1,6 @@
 package com.github.rmannibucau.blog.init;
 
-import com.github.rmannibucau.blog.dao.PostRepository;
-import com.github.rmannibucau.blog.dao.TagRepository;
 import com.github.rmannibucau.blog.dao.UserRepository;
-import com.github.rmannibucau.blog.domain.Post;
 import com.github.rmannibucau.blog.domain.User;
 
 import javax.annotation.PostConstruct;
@@ -20,16 +17,8 @@ import java.util.concurrent.Future;
 @Singleton
 @Startup
 public class DBSetup {
-    public static final String DEFAULT_CATEGORY = "Default";
-
     @Inject
     private UserRepository users;
-
-    @Inject
-    private TagRepository categories;
-
-    @Inject
-    private PostRepository posts;
 
     @Resource
     private SessionContext sc;
@@ -45,15 +34,6 @@ public class DBSetup {
     public Future<Boolean> doInit() {
         if (users.count() == 0) {
             addDefaultUser();
-
-            for (int i = 0; i < 30; i++) {
-                Post p = new Post();
-                p.setTitle("#" + i);
-                p.setContent("#" + i);
-                p.setAuthor(users.findAll().iterator().next());
-                p.setStatus(Post.Status.PUBLISHED);
-                posts.save(p);
-            }
         }
         return new AsyncResult<>(true);
     }
