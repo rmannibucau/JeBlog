@@ -13,7 +13,16 @@ public class DaoTransactionResolver implements Serializable {
         try {
             return r.call();
         } catch (final Exception e) {
-            throw new RuntimeException(e);
+            if (RuntimeException.class.isInstance(e)) {
+                throw RuntimeException.class.cast(e);
+            }
+            throw new TransactionException(e);
+        }
+    }
+
+    public static class TransactionException extends RuntimeException {
+        public TransactionException(final Exception e) {
+            super(e);
         }
     }
 }
