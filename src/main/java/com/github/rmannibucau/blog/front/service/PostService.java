@@ -33,7 +33,7 @@ public class PostService {
 
     public void save(final PostDto post) {
         final Post toSave;
-        if (post.getId() == null) {
+        if (post.getCreated() == null) {
             toSave = new Post();
         } else {
             toSave = posts.findById(post.getId());
@@ -46,6 +46,7 @@ public class PostService {
         toSave.setContent(post.getContent());
         toSave.setStatus(post.getStatus());
         toSave.setAuthor(users.findByLogin(user.getLogin()));
+        toSave.setFormat(post.getFormat());
 
         for (final String name : post.getTags()) {
             Tag tag = tags.findByName(name);

@@ -7,6 +7,7 @@ import com.github.rmannibucau.blog.dao.api.Param;
 import com.github.rmannibucau.blog.dao.api.Query;
 import com.github.rmannibucau.blog.dao.api.Repository;
 
+import javax.annotation.PreDestroy;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
@@ -19,12 +20,18 @@ import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.Callable;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 @Repository
 @ApplicationScoped
 public class RepositoryHandler implements InvocationHandler, Serializable {
     private static final String FLUSH_SUFFIX = "AndFlush";
+
+    private final ConcurrentMap<Method, Metadata> metadatas = new ConcurrentHashMap<>();
 
     @PersistenceContext(name = "je-blog")
     private EntityManager em;
@@ -34,45 +41,85 @@ public class RepositoryHandler implements InvocationHandler, Serializable {
 
     @Override
     public Object invoke(final Object proxy, final Method method, final Object[] args) throws Throwable {
-        if (isTransactional(method)) {
-            return tx.run(new Callable<Object>() {
-                @Override
-                public Object call() throws Exception {
-                    return doInvoke(proxy, method, args);
-                }
-            });
+        Metadata metadata = metadatas.get(method);
+        if (metadata == null) {
+            metadata = initMetaData(proxy, method);
+            metadatas.putIfAbsent(method, metadata);
         }
-        return doInvoke(proxy, method, args);
+
+        if (metadata.txRequired) {
+            return tx.run(new DoInvoke(method, args, metadata));
+        }
+        return doInvoke(method, args, metadata);
     }
 
-    // TODO: cache metadata?
-    private Object doInvoke(final Object proxy, final Method method, final Object[] args) {
+    @PreDestroy
+    public void cleanUp() {
+        metadatas.clear();
+    }
+
+    private Metadata initMetaData(final Object proxy, final Method method) {
+        final boolean providedMethod = JpaRepository.class.equals(method.getDeclaringClass());
+        final Query annotation = method.getAnnotation(Query.class);
+
+        final Metadata metadata = new Metadata();
+        metadata.domainClass = findGenericArg(proxy, 0);
+        metadata.txRequired = annotation == null || annotation.needTransaction();
+
+        if (!providedMethod) {
+            if (annotation == null || annotation.countQuery().isEmpty()) {
+                metadata.countQueryName = queryName(metadata.domainClass.getSimpleName(), "count");
+            } else {
+                metadata.countQueryName = queryName(metadata.domainClass.getSimpleName(), annotation.countQuery());
+            }
+
+            metadata.queryName = queryName(metadata.domainClass.getSimpleName(), method.getName());
+
+            try { // check the count query exists
+                em.createNamedQuery(metadata.countQueryName, Long.class);
+            } catch (final Exception e) {
+                // default query, matches only findAll
+                metadata.countQuery  = "select count(e) from " + metadata.domainClass.getSimpleName() + " e";
+            }
+
+            // init param names
+            final Class<?>[] parameterTypes = method.getParameterTypes();
+            final Annotation[][] parameterAnnotations = method.getParameterAnnotations();
+            for (int i = 0; i < parameterTypes.length; i++) {
+                if (!PageRequest.class.isAssignableFrom(parameterTypes[i])) {
+                    metadata.parameterNames.put(i, findParamName(parameterAnnotations[i]));
+                }
+            }
+        }
+
+        return metadata;
+    }
+
+    private Object doInvoke(final Method method, final Object[] args, final Metadata metadata) {
         Object result = null;
 
         final String name = method.getName();
         if (JpaRepository.class.equals(method.getDeclaringClass())) { // map primitives of the EntityManager
             if (name.equals("findById") && args.length == 1) {
-                result = em.find(findGenericArg(proxy, 0), args[0]);
+                result = em.find(metadata.domainClass, args[0]);
             } else if (name.startsWith("save") && args.length == 1) {
-                final Object id = em.getEntityManagerFactory().getPersistenceUnitUtil().getIdentifier(args[0]);
-                if (id == null) {
+                if (getIdentifier(args[0]) == null) {
                     em.persist(args[0]);
                 } else {
                     em.merge(args[0]);
                 }
             } else if (name.equals("deleteById") && args.length == 1) {
-                em.remove(em.find(findGenericArg(proxy, 0), args[0]));
+                em.remove(em.find(metadata.domainClass, args[0]));
             } else if (name.equals("delete") && args.length == 1) {
                 em.remove(args[0]);
             } else if ("hasId".equals(name) && args.length == 1) {
-                return em.getEntityManagerFactory().getPersistenceUnitUtil().getIdentifier(args[0]) != null;
+                return getIdentifier(args[0]) != null;
             } else {
                 throw new UnsupportedOperationException(name + " not yet implemented");
             }
         } else { // convention over NamedQuery
-            final Class<?> entityClass = findGenericArg(proxy, 0);
-            final javax.persistence.Query query = em.createNamedQuery(queryName(entityClass.getSimpleName(), name));
-            final PageRequest request = setParameters(method.getParameterAnnotations(), args, query, false);
+            final javax.persistence.Query query = em.createNamedQuery(metadata.queryName);
+            final PageRequest request = setParameters(metadata, args, query, false);
 
             final Class<?> returnType = method.getReturnType();
             if (Collection.class.isAssignableFrom(returnType)) {
@@ -81,7 +128,7 @@ public class RepositoryHandler implements InvocationHandler, Serializable {
                 if (request == null) {
                     throw new IllegalArgumentException("Missing PageRequest as parameter - to get a Page you need to fill a PageRequest");
                 }
-                result = new Page<Object>(query.getResultList(), request, count(entityClass.getSimpleName(), method, args));
+                result = new Page<Object>(query.getResultList(), request, count(metadata, args));
             } else {
                 try {
                     result = query.getSingleResult();
@@ -98,7 +145,24 @@ public class RepositoryHandler implements InvocationHandler, Serializable {
         return result;
     }
 
-    private static PageRequest setParameters(final Annotation[][] methodAnnotations, final Object[] args, final javax.persistence.Query query, final boolean skipRequest) {
+    private Object getIdentifier(final Object arg) {
+        return em.getEntityManagerFactory().getPersistenceUnitUtil().getIdentifier(arg);
+    }
+
+    private long count(final Metadata metadata, final Object[] args) {
+        final TypedQuery<Long> typedQuery;
+        if (metadata.countQueryName != null) {
+            typedQuery = em.createNamedQuery(metadata.countQueryName, Long.class);
+        } else {
+            typedQuery = em.createQuery(metadata.countQuery, Long.class);
+        }
+
+        setParameters(metadata, args, typedQuery, true);
+
+        return typedQuery.getSingleResult();
+    }
+
+    private static PageRequest setParameters(final Metadata metadata, final Object[] args, final javax.persistence.Query query, final boolean skipRequest) {
         PageRequest request = null;
 
         for (int i = 0; i < args.length; i++) {
@@ -109,32 +173,11 @@ public class RepositoryHandler implements InvocationHandler, Serializable {
                     query.setMaxResults(request.getPageSize());
                 }
             } else {
-                query.setParameter(findParamName(methodAnnotations[i]), args[i]);
+                query.setParameter(metadata.parameterNames.get(i), args[i]);
             }
         }
 
         return request;
-    }
-
-    private long count(final String domain, final Method method, final Object[] args) {
-        final Query annotation = method.getAnnotation(Query.class);
-        final String query;
-        if (annotation == null || annotation.countQuery().isEmpty()) {
-            query = "count";
-        } else {
-            query = annotation.countQuery();
-        }
-
-        TypedQuery<Long> typedQuery;
-        try {
-            typedQuery = em.createNamedQuery(queryName(domain, query), Long.class);
-        } catch (final Exception e) {
-            typedQuery = em.createQuery("select count(e) from " + domain + " e", Long.class);
-        }
-
-        setParameters(method.getParameterAnnotations(), args, typedQuery, true);
-
-        return typedQuery.getSingleResult();
     }
 
     private static String queryName(final String simpleName, final String methodName) {
@@ -152,11 +195,6 @@ public class RepositoryHandler implements InvocationHandler, Serializable {
             }
         }
         throw new IllegalStateException("Can't find @Param");
-    }
-
-    private static boolean isTransactional(final Method method) {
-        final Query query = method.getAnnotation(Query.class);
-        return query == null || query.needTransaction();
     }
 
     private static Class<?> findGenericArg(final Object o, final int idx) {
@@ -186,5 +224,31 @@ public class RepositoryHandler implements InvocationHandler, Serializable {
         }
 
         throw new IllegalStateException(o + " is not an instance of Repository");
+    }
+
+    private class DoInvoke implements Callable<Object> {
+        private final Method method;
+        private final Object[] args;
+        private final Metadata metadata;
+
+        public DoInvoke(final Method method, final Object[] args, final Metadata metadata) {
+            this.method = method;
+            this.args = args;
+            this.metadata = metadata;
+        }
+
+        @Override
+        public Object call() throws Exception {
+            return doInvoke(method, args, metadata);
+        }
+    }
+
+    private static class Metadata {
+        public Class<?> domainClass = null;
+        public boolean txRequired = true;
+        public String queryName = null;
+        public String countQueryName = null;
+        public String countQuery = null;
+        public Map<Integer, String> parameterNames = new HashMap<>();
     }
 }

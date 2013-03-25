@@ -31,7 +31,7 @@ import java.util.Date;
 public class User implements Serializable {
     @Id
     @GeneratedValue
-    protected Long id;
+    protected long id;
 
     @Temporal(TemporalType.TIMESTAMP)
     protected Date created;
@@ -140,16 +140,16 @@ public class User implements Serializable {
 
         final User that = (User) o;
 
-        if (id == null || that.id == null || id <= 0) {
+        if (id <= 0) {
             return this == that;
         }
-        return id.equals(that.id);
+        return id == that.id;
 
     }
 
     @Override
     public int hashCode() {
-        if (id == null) {
+        if (id == 0) {
             return super.hashCode();
         }
         return (int) (id ^ (id >>> 32));
