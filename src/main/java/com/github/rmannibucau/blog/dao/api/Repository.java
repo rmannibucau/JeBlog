@@ -1,6 +1,6 @@
 package com.github.rmannibucau.blog.dao.api;
 
-import org.apache.deltaspike.core.api.invocationhandler.annotation.InvocationHandlerBinding;
+import org.apache.deltaspike.partialbean.api.PartialBeanBinding;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
@@ -11,7 +11,7 @@ import static java.lang.annotation.ElementType.PARAMETER;
 import static java.lang.annotation.ElementType.TYPE;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
-@InvocationHandlerBinding
+@PartialBeanBinding
 @Target( { TYPE, METHOD, PARAMETER, FIELD })
 @Retention(RUNTIME)
 public @interface Repository {

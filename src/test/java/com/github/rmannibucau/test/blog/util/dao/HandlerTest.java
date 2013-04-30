@@ -109,7 +109,7 @@ public class HandlerTest {
         em.persist(e);
         em.flush();
 
-        assertEquals(init + 1, dao.count());
+        assertEquals(init + 1, dao.countAll());
     }
 
     @Test

@@ -32,7 +32,7 @@ public class DBSetup {
 
     @Asynchronous
     public Future<Boolean> doInit() {
-        if (users.count() == 0) {
+        if (users.countAll() == 0) {
             addDefaultUser();
         }
         return new AsyncResult<>(true);

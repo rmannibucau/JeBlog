@@ -25,7 +25,7 @@ import java.util.Date;
 @NamedQueries({
         @NamedQuery(name = "User.findByLogin", query = "select u from User u where u.login = :login"),
         @NamedQuery(name = "User.findByLoginAndPassword", query = "select u from User u where u.login = :login and  u.password = :password"),
-        @NamedQuery(name = "User.count", query = "select count(u) from User u"),
+        @NamedQuery(name = "User.countAll", query = "select count(u) from User u"),
         @NamedQuery(name = "User.findAll", query = "select u from User u")
 })
 public class User implements Serializable {

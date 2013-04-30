@@ -14,9 +14,6 @@ import javax.enterprise.context.ApplicationScoped;
 @Repository
 @ApplicationScoped
 public interface PostRepository extends JpaRepository<Post, Long> {
-    @Query(countQuery = "countByStatus")
     Page<Post> findByStatus(@Param("status") Post.Status status, PageRequest pageable);
-
-    @Query(countQuery = "countByStatusAndTag")
     Page<Post> findByStatusAndTag(@Param("status") Post.Status status, @Param("tag") Tag tag, PageRequest pageable);
 }

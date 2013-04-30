@@ -9,7 +9,7 @@ import com.github.rmannibucau.blog.domain.Tag;
 import com.github.rmannibucau.blog.front.dto.PostDto;
 import com.github.rmannibucau.blog.processor.ContentProcessor;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.deltaspike.core.api.config.annotation.ConfigProperty;
+import org.apache.deltaspike.core.api.config.ConfigProperty;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ViewScoped;

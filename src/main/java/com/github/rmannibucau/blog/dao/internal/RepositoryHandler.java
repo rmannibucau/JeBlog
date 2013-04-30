@@ -41,6 +41,10 @@ public class RepositoryHandler implements InvocationHandler, Serializable {
 
     @Override
     public Object invoke(final Object proxy, final Method method, final Object[] args) throws Throwable {
+        if (Object.class.equals(method.getDeclaringClass()) && "toString".equals(method.getName())) {
+            return toString();
+        }
+
         Metadata metadata = metadatas.get(method);
         if (metadata == null) {
             metadata = initMetaData(proxy, method);
@@ -68,7 +72,7 @@ public class RepositoryHandler implements InvocationHandler, Serializable {
 
         if (!providedMethod) {
             if (annotation == null || annotation.countQuery().isEmpty()) {
-                metadata.countQueryName = queryName(metadata.domainClass.getSimpleName(), "count");
+                metadata.countQueryName = queryName(metadata.domainClass.getSimpleName(), method.getName().replace("find", "count"));
             } else {
                 metadata.countQueryName = queryName(metadata.domainClass.getSimpleName(), annotation.countQuery());
             }
@@ -163,6 +167,10 @@ public class RepositoryHandler implements InvocationHandler, Serializable {
     }
 
     private static PageRequest setParameters(final Metadata metadata, final Object[] args, final javax.persistence.Query query, final boolean skipRequest) {
+        if (args == null) {
+            return null;
+        }
+
         PageRequest request = null;
 
         for (int i = 0; i < args.length; i++) {
