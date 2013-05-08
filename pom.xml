@@ -36,11 +36,47 @@
       <scope>provided</scope>
     </dependency>
 
-    <dependency> <!-- TODO: use asciidoctor -->
+    <dependency>
       <groupId>org.markdownj</groupId>
       <artifactId>markdownj</artifactId>
       <version>0.3.0-1.0.2b4</version>
     </dependency>
+    <dependency>
+      <groupId>org.asciidoctor</groupId>
+      <artifactId>asciidoctor-java-integration</artifactId>
+      <version>0.1.2</version>
+      <exclusions>
+        <exclusion>
+          <groupId>rubygems</groupId>
+          <artifactId>asciidoctor</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>rubygems</groupId>
+          <artifactId>haml</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>rubygems</groupId>
+          <artifactId>slim</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>rubygems</groupId>
+          <artifactId>erubis</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>rubygems</groupId>
+          <artifactId>coderay</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>rubygems</groupId>
+          <artifactId>temple</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>rubygems</groupId>
+          <artifactId>tilt</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+
     <dependency>
       <groupId>org.apache.commons</groupId>
       <artifactId>commons-lang3</artifactId>
@@ -248,7 +284,9 @@
         <version>${openejb.version}</version>
         <executions>
           <execution>
-            <goals><goal>generate</goal></goals>
+            <goals>
+              <goal>generate</goal>
+            </goals>
           </execution>
         </executions>
       </plugin>
