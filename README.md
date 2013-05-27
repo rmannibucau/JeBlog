@@ -30,3 +30,10 @@ To make a new post, first sign in using these credentials:
 These settings are configured in `src/main/tomee/conf/tomee.xml`.
 
 After signing in, you can write your blog post in AsciiDoc, Markdown or HTML. AsciiDoc is the default choice, powered by [Asciidoctor](http://asciidoctor.org).
+
+## Screenshots
+
+![Login](https://raw.github.com/rmannibucau/JeBlog/master/images/blog-login.png)
+![Create/Edit](https://raw.github.com/rmannibucau/JeBlog/master/images/blog-edit.png)
+![Home](https://raw.github.com/rmannibucau/JeBlog/master/images/blog-home.png)
+
