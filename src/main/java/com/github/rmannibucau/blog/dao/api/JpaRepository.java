@@ -1,6 +1,8 @@
 package com.github.rmannibucau.blog.dao.api;
 
-public interface JpaRepository<Entity, Id> {
+import java.io.Serializable;
+
+public interface JpaRepository<Entity, Id> extends Serializable {
     void save(Entity e);
     void saveAndFlush(Entity e);
     void deleteById(Id id);

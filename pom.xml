@@ -14,7 +14,7 @@
     <dependency>
       <groupId>org.apache.openejb</groupId>
       <artifactId>javaee-api</artifactId>
-      <version>6.0-4</version>
+      <version>6.0-5</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
@@ -278,8 +278,8 @@
           </dependency>
         </dependencies>
       </plugin>
-
-      <plugin> <!-- skinny war -->
+<!--
+      <plugin> < skinny war >
         <groupId>org.apache.openejb.maven</groupId>
         <artifactId>jarstxt-maven-plugin</artifactId>
         <version>${openejb.version}</version>
@@ -291,7 +291,7 @@
           </execution>
         </executions>
       </plugin>
-
+-->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-war-plugin</artifactId>
@@ -340,7 +340,7 @@
     <openjpa.version>2.2.0</openjpa.version>
     <openejb.version>4.6.0-SNAPSHOT</openejb.version>
     <tomee.version>1.6.0-SNAPSHOT</tomee.version>
-    <deltaspike.version>0.4-incubating-SNAPSHOT</deltaspike.version>
+    <deltaspike.version>0.4-SNAPSHOT</deltaspike.version>
   </properties>
 
   <repositories>
